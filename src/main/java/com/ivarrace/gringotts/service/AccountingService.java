@@ -1,44 +1,51 @@
 package com.ivarrace.gringotts.service;
 
+import com.ivarrace.gringotts.dto.mapper.AccountingMapper;
+import com.ivarrace.gringotts.dto.request.AccountingRequest;
+import com.ivarrace.gringotts.dto.response.AccountingResponse;
 import com.ivarrace.gringotts.exception.ObjectNotFoundException;
 import com.ivarrace.gringotts.repository.AccountingRepository;
 import com.ivarrace.gringotts.repository.model.Accounting;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
 
 @Service
 public class AccountingService {
 
-    @Autowired
-    private AccountingRepository accountingRepository;
+    private final AccountingRepository accountingRepository;
+    private final AccountingMapper accountingMapper;
 
-    public List<Accounting> findAll() {
-        return accountingRepository.findAll();
+    public AccountingService(AccountingRepository accountingRepository,
+                             AccountingMapper accountingMapper){
+        this.accountingRepository=accountingRepository;
+        this.accountingMapper=accountingMapper;
     }
 
-    public Accounting findById(String id) {
-        return accountingRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException(id));
+    public List<AccountingResponse> findAll() {
+        return accountingMapper.toDto(accountingRepository.findAll());
     }
 
-    public Accounting create(Accounting accounting) {
-        accounting.setExpenses(Collections.emptyList());
-        accounting.setIncome(Collections.emptyList());
-        return accountingRepository.save(accounting);
+    public AccountingResponse findById(String id) {
+        return accountingMapper.toDto(findAccountingEntity(id));
+    }
+
+    public AccountingResponse create(AccountingRequest accounting) {
+        return accountingMapper.toDto(accountingRepository.save(accountingMapper.toNewEntity(accounting)));
     }
 
     public void deleteById(String id) {
-        Accounting accounting = findById(id);
-        accountingRepository.delete(accounting);
+        accountingRepository.delete(findAccountingEntity(id));
     }
 
-    public Accounting modify(String id, Accounting accounting) {
-        Accounting actual = findById(id);
+    public AccountingResponse modify(String id, AccountingRequest accounting) {
+        Accounting actual = findAccountingEntity(id);
         actual.setName(accounting.getName());
-        actual.setExpenses(accounting.getExpenses());
-        return accountingRepository.save(actual);
+        return accountingMapper.toDto(accountingRepository.save(actual));
+    }
+
+    private Accounting findAccountingEntity(String accountingId){
+        return accountingRepository.findById(accountingId).orElseThrow(() -> new ObjectNotFoundException("Accounting["+accountingId+"]"));
     }
 
 }

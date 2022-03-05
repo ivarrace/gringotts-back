@@ -1,8 +1,8 @@
 package com.ivarrace.gringotts.controller;
 
-import com.ivarrace.gringotts.repository.model.Accounting;
+import com.ivarrace.gringotts.dto.request.AccountingRequest;
+import com.ivarrace.gringotts.dto.response.AccountingResponse;
 import com.ivarrace.gringotts.service.AccountingService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,26 +11,29 @@ import java.util.List;
 @RequestMapping("/accounting")
 public class AccountingController {
 
-    @Autowired
-    private AccountingService accountingService;
+    private final AccountingService accountingService;
+
+    public AccountingController(AccountingService accountingService){
+        this.accountingService = accountingService;
+    }
 
     @GetMapping("/")
-    public List<Accounting> findAll(){
+    public List<AccountingResponse> findAll(){
         return accountingService.findAll();
     }
 
     @GetMapping("/{accountingId}")
-    public Accounting findById(@PathVariable String accountingId){
+    public AccountingResponse findById(@PathVariable String accountingId){
         return accountingService.findById(accountingId);
     }
 
     @PostMapping("/")
-    public Accounting create(@RequestBody Accounting accounting){
+    public AccountingResponse create(@RequestBody AccountingRequest accounting){
         return accountingService.create(accounting);
     }
 
     @PutMapping("/{accountingId}")
-    public Accounting put(@PathVariable String accountingId, @RequestBody Accounting accounting){
+    public AccountingResponse put(@PathVariable String accountingId, @RequestBody AccountingRequest accounting){
         return accountingService.modify(accountingId, accounting);
     }
 
