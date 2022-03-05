@@ -5,93 +5,10 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-/**
- * {
- * id: 1,
- * creationDate: "01/01/1970",
- * lastUpdate: "01/01/1970",
- * name: "Personal",
- * gastos: [
- * {
- * id: "coche",
- * creationDate: "01/01/1970",
- * name: "Coche",
- * categorias: [
- * {
- * id: "gasolina-coche",
- * creationDate: "01/01/1970",
- * name: "Gasolina",
- * movimientos: [
- * {
- * fecha: "01/01/1970",
- * cantidad: 100.00,
- * info: "3L de gasolina",
- * }
- * ]
- * },
- * ],
- * },
- * {
- * id: "casa",
- * creationDate: "01/01/1970",
- * name: "Casa",
- * categorias: [
- * {
- * id: "alquiler",
- * creationDate: "01/01/1970",
- * name: "Alquiler",
- * movimientos: [
- * {
- * fecha: "01/01/1970",
- * cantidad: 120.00,
- * info: "",
- * }
- * ]
- * },
- * {
- * id: "servicios",
- * creationDate: "01/01/1970",
- * name: "Servicios",
- * movimientos: [
- * {
- * fecha: "01/01/1970",
- * cantidad: 100.00,
- * info: "Gas",
- * }
- * ]
- * },
- * ],
- * },
- * ],
- * ingresos:  [
- * {
- * id: "trabajo",
- * creationDate: "01/01/1970",
- * name: "Trabajo",
- * categorias: [
- * {
- * id: "nomina",
- * creationDate: "01/01/1970",
- * name: "Nomina",
- * movimientos: [
- * {
- * fecha: "01/01/1970",
- * cantidad: 100.00,
- * info: "",
- * }
- * ]
- * },
- * ],
- * },
- * ],
- * }
- */
-
-@Document(collection = "presupuestos")
+@Document(collection = "accounting")
 public class Accounting {
 
     @Id
@@ -101,8 +18,8 @@ public class Accounting {
     @LastModifiedDate
     private Date lastModified;
     private String name;
-    private List<AccountingGroup> expenses = Collections.emptyList();
-    private List<AccountingGroup> income = Collections.emptyList();
+    private List<AccountingGroup> expenses;
+    private List<AccountingGroup> income;
 
 
     public String getId() {

@@ -1,37 +1,17 @@
 package com.ivarrace.gringotts.repository.model;
 
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-/**
- * {
- *  *  *             id: "gasolina-coche",
- *  *  *             creationDate: "01/01/1970",
- *  *  *             name: "Gasolina",
- *  *  *             records: [
- *  *  *               {
- *  *  *                 fecha: "01/01/1970",
- *  *  *                 cantidad: 100.00,
- *  *  *                 info: "3L de gasolina",
- *  *  *               }
- *  *  *             ]
- *  *  *           },
- */
-
-@Document(collection = "categorias")
 public class AccountingCategory {
 
-    @Id
     private String id;
     @CreatedDate
     private Date createdDate;
     private String name;
-    private List<Records> records = Collections.emptyList();;
+    private List<Record> records;
 
     public String getId() {
         return id;
@@ -57,11 +37,11 @@ public class AccountingCategory {
         this.name = name;
     }
 
-    public List<Records> getRecords() {
+    public List<Record> getRecords() {
         return records;
     }
 
-    public void setRecords(List<Records> records) {
+    public void setRecords(List<Record> records) {
         this.records = records;
     }
 }

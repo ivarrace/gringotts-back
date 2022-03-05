@@ -13,7 +13,7 @@ import java.util.Date;
  *  *  *  *               }
  */
 @Document(collection = "movimientos")
-public class Records {
+public class Record {
 
     @Id
     private String id;

@@ -6,6 +6,7 @@ import com.ivarrace.gringotts.repository.model.Accounting;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -23,6 +24,8 @@ public class AccountingService {
     }
 
     public Accounting create(Accounting accounting) {
+        accounting.setExpenses(Collections.emptyList());
+        accounting.setIncome(Collections.emptyList());
         return accountingRepository.save(accounting);
     }
 
