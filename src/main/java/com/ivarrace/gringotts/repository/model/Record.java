@@ -1,21 +1,9 @@
 package com.ivarrace.gringotts.repository.model;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
-
 import java.util.Date;
 
-/**
- * {
- *  *  *  *                 fecha: "01/01/1970",
- *  *  *  *                 cantidad: 100.00,
- *  *  *  *                 info: "3L de gasolina",
- *  *  *  *               }
- */
-@Document(collection = "movimientos")
 public class Record {
 
-    @Id
     private String id;
     private Date fecha;
     private double cantidad;
