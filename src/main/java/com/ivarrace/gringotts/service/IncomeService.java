@@ -5,7 +5,6 @@ import com.ivarrace.gringotts.repository.AccountingRepository;
 import com.ivarrace.gringotts.repository.model.Accounting;
 import com.ivarrace.gringotts.repository.model.AccountingCategory;
 import com.ivarrace.gringotts.repository.model.AccountingGroup;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -16,26 +15,23 @@ import java.util.UUID;
 @Service
 public class IncomeService {
 
-    @Autowired
-    private AccountingRepository accountingRepository;
+    private final AccountingRepository accountingRepository;
+
+    public IncomeService(AccountingRepository accountingRepository) {
+        this.accountingRepository = accountingRepository;
+    }
 
     public List<AccountingGroup> findAll(String accountingId) {
-        return findAccountingById(accountingId).getIncome();
+        return findAccountingEntity(accountingId).getIncome();
     }
 
     public AccountingGroup findById(String accountingId, String groupId) {
-        return findAccountingById(accountingId).getIncome()
-                .stream()
-                .filter((group -> groupId.equals(group.getId())))
-                .findFirst().orElseThrow(() -> new ObjectNotFoundException(accountingId));
-    }
-
-    private Accounting findAccountingById(String id) {
-        return accountingRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException(id));
+        Accounting accounting = findAccountingEntity(accountingId);
+        return findAccountingGroup(accounting, groupId);
     }
 
     public Accounting create(String accountingId, AccountingGroup group) {
-        Accounting actual = findAccountingById(accountingId);
+        Accounting actual = findAccountingEntity(accountingId);
         group.setId(UUID.randomUUID().toString());
         group.setCreatedDate(new Date());
         group.setCategories(Collections.emptyList());
@@ -44,36 +40,32 @@ public class IncomeService {
     }
 
     public Accounting deleteById(String accountingId, String groupId) {
-        Accounting actual = findAccountingById(accountingId);
-        actual.getIncome().removeIf(group -> groupId.equals(group.getId()));
-        return accountingRepository.save(actual);
+        Accounting accounting = findAccountingEntity(accountingId);
+        findAccountingGroup(accounting, groupId);
+        accounting.getIncome().removeIf(group -> groupId.equals(group.getId()));
+        return accountingRepository.save(accounting);
     }
 
     public Accounting modify(String accountingId, String groupId, AccountingGroup newGroup) {
-        Accounting actual = findAccountingById(accountingId);
-        AccountingGroup actualGroup = actual.getIncome().stream()
-                .filter(group -> groupId.equals(group.getId()))
-                .findFirst().orElseThrow(() -> new ObjectNotFoundException(groupId));
+        Accounting accounting = findAccountingEntity(accountingId);
+        AccountingGroup actualGroup = findAccountingGroup(accounting, groupId);
         actualGroup.setName(newGroup.getName());
-        return accountingRepository.save(actual);
+        return accountingRepository.save(accounting);
     }
 
     public List<AccountingCategory> findAllCategories(String accountingId, String groupId) {
-        return findById(accountingId, groupId).getCategories();
+        Accounting accounting = findAccountingEntity(accountingId);
+        return findAccountingGroup(accounting, groupId).getCategories();
     }
 
     public AccountingCategory findCategoryById(String accountingId, String groupId, String categoryId) {
-        return findById(accountingId, groupId).getCategories()
-                .stream()
-                .filter((category -> categoryId.equals(category.getId())))
-                .findFirst().orElseThrow(() -> new ObjectNotFoundException(accountingId));
+        Accounting accounting = findAccountingEntity(accountingId);
+        return findAccountingCategory(accounting, groupId, categoryId);
     }
 
     public Accounting createCategory(String accountingId, String groupId, AccountingCategory category) {
-        Accounting accounting = findAccountingById(accountingId);
-        AccountingGroup group = accounting.getIncome().stream()
-                .filter((item -> groupId.equals(item.getId())))
-                .findFirst().orElseThrow(() -> new ObjectNotFoundException(accountingId));
+        Accounting accounting = findAccountingEntity(accountingId);
+        AccountingGroup group = findAccountingGroup(accounting, groupId);
         category.setId(UUID.randomUUID().toString());
         category.setCreatedDate(new Date());
         category.setRecords(Collections.emptyList());
@@ -82,24 +74,36 @@ public class IncomeService {
     }
 
     public Accounting deleteCategoryById(String accountingId, String groupId, String categoryId) {
-        Accounting accounting = findAccountingById(accountingId);
-        AccountingGroup group = accounting.getIncome().stream()
-                .filter((item -> groupId.equals(item.getId())))
-                .findFirst().orElseThrow(() -> new ObjectNotFoundException(accountingId));
+        Accounting accounting = findAccountingEntity(accountingId);
+        AccountingGroup group = findAccountingGroup(accounting, groupId);
+        findAccountingCategory(accounting, groupId, categoryId);
         group.getCategories().removeIf(item -> categoryId.equals(item.getId()));
         return accountingRepository.save(accounting);
     }
 
-    public Accounting modifyCategory(String accountingId, String groupId, String categoryId, AccountingCategory newCategory) {
-        Accounting accounting = findAccountingById(accountingId);
-        AccountingGroup group = accounting.getIncome().stream()
-                .filter((item -> groupId.equals(item.getId())))
-                .findFirst().orElseThrow(() -> new ObjectNotFoundException(accountingId));
-        AccountingCategory category = group.getCategories().stream()
-                .filter(item -> categoryId.equals(item.getId()))
-                .findFirst().orElseThrow(() -> new ObjectNotFoundException(groupId));
+    public Accounting modifyCategory(String accountingId, String groupId, String categoryId,
+                                     AccountingCategory newCategory) {
+        Accounting accounting = findAccountingEntity(accountingId);
+        AccountingCategory category = findAccountingCategory(accounting, groupId, categoryId);
         category.setName(newCategory.getName());
         return accountingRepository.save(accounting);
     }
 
+    private Accounting findAccountingEntity(String accountingId) {
+        return accountingRepository.findById(accountingId)
+                .orElseThrow(() -> new ObjectNotFoundException("Accounting[" + accountingId + "]"));
+    }
+
+    private AccountingGroup findAccountingGroup(Accounting accounting, String groupId) {
+        return accounting.getIncome().stream()
+                .filter((item -> groupId.equals(item.getId())))
+                .findFirst().orElseThrow(() -> new ObjectNotFoundException("Group[" + groupId + "]"));
+    }
+
+    private AccountingCategory findAccountingCategory(Accounting accounting, String groupId, String categoryId) {
+        AccountingGroup group = findAccountingGroup(accounting, groupId);
+        return group.getCategories().stream()
+                .filter(item -> categoryId.equals(item.getId()))
+                .findFirst().orElseThrow(() -> new ObjectNotFoundException("Category[" + categoryId + "]"));
+    }
 }

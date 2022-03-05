@@ -3,7 +3,6 @@ package com.ivarrace.gringotts.controller;
 import com.ivarrace.gringotts.repository.model.Accounting;
 import com.ivarrace.gringotts.repository.model.AccountingCategory;
 import com.ivarrace.gringotts.repository.model.AccountingGroup;
-import com.ivarrace.gringotts.service.AccountingService;
 import com.ivarrace.gringotts.service.IncomeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -13,9 +12,6 @@ import java.util.List;
 @RestController()
 @RequestMapping("/accounting/{accountingId}/income")
 public class IncomeController {
-
-    @Autowired
-    private AccountingService accountingService;
 
     @Autowired
     private IncomeService incomeService;
