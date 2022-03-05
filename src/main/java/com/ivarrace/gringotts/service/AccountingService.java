@@ -17,9 +17,9 @@ public class AccountingService {
     private final AccountingMapper accountingMapper;
 
     public AccountingService(AccountingRepository accountingRepository,
-                             AccountingMapper accountingMapper){
-        this.accountingRepository=accountingRepository;
-        this.accountingMapper=accountingMapper;
+                             AccountingMapper accountingMapper) {
+        this.accountingRepository = accountingRepository;
+        this.accountingMapper = accountingMapper;
     }
 
     public List<AccountingResponse> findAll() {
@@ -44,8 +44,9 @@ public class AccountingService {
         return accountingMapper.toDto(accountingRepository.save(actual));
     }
 
-    private Accounting findAccountingEntity(String accountingId){
-        return accountingRepository.findById(accountingId).orElseThrow(() -> new ObjectNotFoundException("Accounting["+accountingId+"]"));
+    private Accounting findAccountingEntity(String accountingId) {
+        return accountingRepository.findById(accountingId)
+                .orElseThrow(() -> new ObjectNotFoundException("Accounting[" + accountingId + "]"));
     }
 
 }
