@@ -33,7 +33,7 @@ public class GroupService {
     }
 
     public List<GroupResponse> findAllByType(String accountingId, GroupType type) {
-        return groupMapper.toDto(accountingUtils.findAccountingEntity(accountingId).getGroups().stream()
+        return groupMapper.toDtoList(accountingUtils.findAccountingEntity(accountingId).getGroups().stream()
                 .filter(group -> group.getType().equals(type)).collect(Collectors.toList()));
     }
 

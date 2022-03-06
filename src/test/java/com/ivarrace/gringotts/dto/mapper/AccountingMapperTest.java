@@ -1,0 +1,115 @@
+package com.ivarrace.gringotts.dto.mapper;
+
+import com.ivarrace.gringotts.dto.request.AccountingRequest;
+import com.ivarrace.gringotts.dto.response.AccountingResponse;
+import com.ivarrace.gringotts.repository.model.Accounting;
+import com.ivarrace.gringotts.repository.model.Group;
+import com.ivarrace.gringotts.repository.model.GroupType;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+@ExtendWith(MockitoExtension.class)
+class AccountingMapperTest {
+
+    @Mock
+    GroupMapper groupMapper;
+
+    private AccountingMapper accountingMapper;
+
+    @BeforeEach
+    void setUp() {
+        accountingMapper = new AccountingMapper(groupMapper);
+    }
+
+    @Test
+    void toDto_empty_groups() {
+        Accounting entity = newTestAccounting();
+        AccountingResponse result = accountingMapper.toDto(entity);
+        assertEquals(entity.getId(), result.getId());
+        assertEquals(entity.getName(), result.getName());
+        assertEquals(entity.getCreatedDate(), result.getCreatedDate());
+        assertEquals(entity.getLastModified(), result.getLastModified());
+        assertEquals(0, result.getExpenses().size());
+        assertEquals(0, result.getIncome().size());
+        verify(groupMapper, times(0)).toDto(any());
+    }
+
+    @Test
+    void toDto() {
+        Accounting entity = newTestAccounting();
+        Group expense = newTestGroup(GroupType.EXPENSES);
+        Group income = newTestGroup(GroupType.INCOME);
+        entity.setGroups(Arrays.asList(expense, income));
+        when(groupMapper.toDto(expense)).thenReturn(null);
+        when(groupMapper.toDto(income)).thenReturn(null);
+        AccountingResponse result = accountingMapper.toDto(entity);
+        assertEquals(entity.getId(), result.getId());
+        assertEquals(entity.getName(), result.getName());
+        assertEquals(entity.getCreatedDate(), result.getCreatedDate());
+        assertEquals(entity.getLastModified(), result.getLastModified());
+        assertEquals(1, result.getExpenses().size());
+        assertEquals(1, result.getIncome().size());
+        verify(groupMapper, times(2)).toDto(any());
+    }
+
+    @Test
+    void toDtoList() {
+        Accounting entityA = newTestAccounting();
+        List<AccountingResponse> result = accountingMapper.toDtoList(Collections.singletonList(entityA));
+        assertEquals(1, result.size());
+    }
+
+    @Test
+    void toDtoList_null() {
+        List<AccountingResponse> result = accountingMapper.toDtoList(null);
+        assertEquals(0, result.size());
+    }
+
+    @Test
+    void toDtoList_empty() {
+        List<AccountingResponse> result = accountingMapper.toDtoList(Collections.emptyList());
+        assertEquals(0, result.size());
+    }
+
+    @Test
+    void toNewEntity() {
+        AccountingRequest request = new AccountingRequest();
+        Accounting result = accountingMapper.toNewEntity(request);
+        assertEquals(request.getName(), result.getName());
+        assertEquals(0, result.getGroups().size());
+        assertNull(result.getId());
+        assertNull(result.getCreatedDate());
+        assertNull(result.getLastModified());
+    }
+
+    private Accounting newTestAccounting() {
+        Accounting entity = new Accounting();
+        entity.setId("test-id");
+        entity.setName("test-accounting");
+        entity.setCreatedDate(new Date());
+        entity.setLastModified(new Date());
+        entity.setGroups(Collections.emptyList());
+        return entity;
+    }
+
+    private Group newTestGroup(GroupType type) {
+        Group group = new Group();
+        group.setId("test-" + type.name());
+        group.setName("test-" + type.name());
+        group.setCreatedDate(new Date());
+        group.setType(type);
+        group.setCategories(Collections.emptyList());
+        return group;
+    }
+}

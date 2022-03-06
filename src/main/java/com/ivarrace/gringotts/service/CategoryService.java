@@ -33,7 +33,7 @@ public class CategoryService {
 
     public List<CategoryResponse> findAllCategories(String accountingId, String groupId) {
         Accounting accounting = accountingUtils.findAccountingEntity(accountingId);
-        return categoryMapper.toDto(accountingUtils.findAccountingGroup(accounting, groupId).getCategories());
+        return categoryMapper.toDtoList(accountingUtils.findAccountingGroup(accounting, groupId).getCategories());
     }
 
     public CategoryResponse findCategoryById(String accountingId, String groupId, String categoryId) {

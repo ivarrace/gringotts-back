@@ -22,7 +22,7 @@ public class RecordMapper {
         return dto;
     }
 
-    public List<RecordResponse> toDto(List<Record> list) {
+    public List<RecordResponse> toDtoList(List<Record> list) {
         if (list == null) {
             return Collections.emptyList();
         }

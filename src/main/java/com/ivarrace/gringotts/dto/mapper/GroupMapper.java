@@ -26,11 +26,11 @@ public class GroupMapper {
         dto.setId(entity.getId());
         dto.setName(entity.getName());
         dto.setCreatedDate(entity.getCreatedDate());
-        dto.setCategories(categoryMapper.toDto(entity.getCategories()));
+        dto.setCategories(categoryMapper.toDtoList(entity.getCategories()));
         return dto;
     }
 
-    public List<GroupResponse> toDto(List<Group> list) {
+    public List<GroupResponse> toDtoList(List<Group> list) {
         if (list == null) {
             return Collections.emptyList();
         }

@@ -30,7 +30,7 @@ public class AccountingUtils {
         return group.getCategories().stream().filter(item -> categoryId.equals(item.getId())).findFirst().orElseThrow(() -> new ObjectNotFoundException("Category[" + categoryId + "]"));
     }
 
-    public Record findRecord(Accounting accounting, String groupId, String categoryId, String recordId) {
+    public Record findAccountingRecord(Accounting accounting, String groupId, String categoryId, String recordId) {
         Category category = findAccountingCategory(accounting, groupId, categoryId);
         return category.getRecords().stream().filter(item -> recordId.equals(item.getId())).findFirst().orElseThrow(() -> new ObjectNotFoundException("Record[" + recordId + "]"));
     }

@@ -1,11 +1,13 @@
 package com.ivarrace.gringotts.dto.mapper;
 
+import com.ivarrace.gringotts.dto.response.GroupResponse;
 import com.ivarrace.gringotts.repository.model.GroupType;
 import com.ivarrace.gringotts.dto.request.AccountingRequest;
 import com.ivarrace.gringotts.dto.response.AccountingResponse;
 import com.ivarrace.gringotts.repository.model.Accounting;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,18 +27,21 @@ public class AccountingMapper {
         request.setName(accounting.getName());
         request.setCreatedDate(accounting.getCreatedDate());
         request.setLastModified(accounting.getLastModified());
-        request.setExpenses(accounting.getGroups().stream()
-                .filter(item -> GroupType.EXPENSES.equals(item.getType()))
-                .map(groupMapper::toDto)
-                .collect(Collectors.toList()));
-        request.setIncome(accounting.getGroups().stream()
-                .filter(item -> GroupType.INCOME.equals(item.getType()))
-                .map(groupMapper::toDto)
-                .collect(Collectors.toList()));
+        List<GroupResponse> expenses = new ArrayList<>();
+        List<GroupResponse> income = new ArrayList<>();
+        accounting.getGroups().forEach(group -> {
+            if (GroupType.EXPENSES.equals(group.getType())) {
+                expenses.add(groupMapper.toDto(group));
+            } else if (GroupType.INCOME.equals(group.getType())) {
+                income.add(groupMapper.toDto(group));
+            }
+        });
+        request.setExpenses(expenses);
+        request.setIncome(income);
         return request;
     }
 
-    public List<AccountingResponse> toDto(List<Accounting> list) {
+    public List<AccountingResponse> toDtoList(List<Accounting> list) {
         if (list == null) {
             return Collections.emptyList();
         }

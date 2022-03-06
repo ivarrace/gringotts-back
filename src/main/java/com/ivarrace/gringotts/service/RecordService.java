@@ -31,12 +31,12 @@ public class RecordService {
 
     public List<RecordResponse> findAll(String accountingId, String groupId, String categoryId) {
         Accounting accounting = accountingUtils.findAccountingEntity(accountingId);
-        return recordMapper.toDto(accountingUtils.findAccountingCategory(accounting, groupId, categoryId).getRecords());
+        return recordMapper.toDtoList(accountingUtils.findAccountingCategory(accounting, groupId, categoryId).getRecords());
     }
 
     public RecordResponse findById(String accountingId, String groupId, String categoryId, String recordId) {
         Accounting accounting = accountingUtils.findAccountingEntity(accountingId);
-        return recordMapper.toDto(accountingUtils.findRecord(accounting, groupId, categoryId, recordId));
+        return recordMapper.toDto(accountingUtils.findAccountingRecord(accounting, groupId, categoryId, recordId));
     }
 
     public AccountingResponse create(String accountingId, String groupId, String categoryId, RecordRequest request) {
@@ -49,7 +49,7 @@ public class RecordService {
     public AccountingResponse delete(String accountingId, String groupId, String categoryId, String recordId) {
         Accounting accounting = accountingUtils.findAccountingEntity(accountingId);
         Category category = accountingUtils.findAccountingCategory(accounting, groupId, categoryId);
-        accountingUtils.findRecord(accounting, groupId, categoryId, recordId);
+        accountingUtils.findAccountingRecord(accounting, groupId, categoryId, recordId);
         category.getRecords().removeIf(item -> recordId.equals(item.getId()));
         return accountingMapper.toDto(accountingRepository.save(accounting));
     }
@@ -57,7 +57,7 @@ public class RecordService {
     public AccountingResponse modify(String accountingId, String groupId, String categoryId
             , String recordId, RecordRequest request) {
         Accounting accounting = accountingUtils.findAccountingEntity(accountingId);
-        Record actual = accountingUtils.findRecord(accounting, groupId, categoryId, recordId);
+        Record actual = accountingUtils.findAccountingRecord(accounting, groupId, categoryId, recordId);
         actual.setAmount(request.getAmount());
         actual.setDate(request.getDate());
         actual.setInfo(request.getInfo());

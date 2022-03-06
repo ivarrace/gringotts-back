@@ -24,7 +24,7 @@ public class AccountingService {
     }
 
     public List<AccountingResponse> findAll() {
-        return accountingMapper.toDto(accountingRepository.findAll());
+        return accountingMapper.toDtoList(accountingRepository.findAll());
     }
 
     public AccountingResponse findById(String id) {

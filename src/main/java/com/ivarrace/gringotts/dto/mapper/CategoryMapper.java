@@ -25,11 +25,11 @@ public class CategoryMapper {
         dto.setId(entity.getId());
         dto.setName(entity.getName());
         dto.setCreatedDate(entity.getCreatedDate());
-        dto.setRecords(recordMapper.toDto(entity.getRecords()));
+        dto.setRecords(recordMapper.toDtoList(entity.getRecords()));
         return dto;
     }
 
-    public List<CategoryResponse> toDto(List<Category> list) {
+    public List<CategoryResponse> toDtoList(List<Category> list) {
         if (list == null) {
             return Collections.emptyList();
         }
