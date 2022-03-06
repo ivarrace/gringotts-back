@@ -18,27 +18,27 @@ public class AccountingController {
     }
 
     @GetMapping("/")
-    public List<AccountingResponse> findAll(){
+    public List<AccountingResponse> findAccounting(){
         return accountingService.findAll();
     }
 
     @GetMapping("/{accountingId}")
-    public AccountingResponse findById(@PathVariable String accountingId){
+    public AccountingResponse findAccountingById(@PathVariable String accountingId){
         return accountingService.findById(accountingId);
     }
 
     @PostMapping("/")
-    public AccountingResponse create(@RequestBody AccountingRequest accounting){
+    public AccountingResponse createAccounting(@RequestBody AccountingRequest accounting){
         return accountingService.create(accounting);
     }
 
     @PutMapping("/{accountingId}")
-    public AccountingResponse put(@PathVariable String accountingId, @RequestBody AccountingRequest accounting){
+    public AccountingResponse modifyAccounting(@PathVariable String accountingId, @RequestBody AccountingRequest accounting){
         return accountingService.modify(accountingId, accounting);
     }
 
     @DeleteMapping("/{accountingId}")
-    public void delete(@PathVariable String accountingId){
+    public void deleteAccounting(@PathVariable String accountingId){
         accountingService.deleteById(accountingId);
     }
 

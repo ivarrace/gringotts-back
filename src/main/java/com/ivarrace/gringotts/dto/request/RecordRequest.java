@@ -1,21 +1,12 @@
-package com.ivarrace.gringotts.repository.model;
+package com.ivarrace.gringotts.dto.request;
 
 import java.util.Date;
 
-public class Record {
+public class RecordRequest {
 
-    private String id;
     private Date date;
     private double amount;
     private String info;
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public Date getDate() {
         return date;

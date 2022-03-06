@@ -1,17 +1,14 @@
-package com.ivarrace.gringotts.repository.model;
-
-import org.springframework.data.annotation.CreatedDate;
+package com.ivarrace.gringotts.dto.response;
 
 import java.util.Date;
 import java.util.List;
 
-public class AccountingGroup {
+public class GroupResponse {
 
     private String id;
-    @CreatedDate
     private Date createdDate;
     private String name;
-    private List<AccountingCategory> categories;
+    private List<CategoryResponse> categories;
 
     public Date getCreatedDate() {
         return createdDate;
@@ -29,11 +26,11 @@ public class AccountingGroup {
         this.name = name;
     }
 
-    public List<AccountingCategory> getCategories() {
+    public List<CategoryResponse> getCategories() {
         return categories;
     }
 
-    public void setCategories(List<AccountingCategory> categories) {
+    public void setCategories(List<CategoryResponse> categories) {
         this.categories = categories;
     }
 

@@ -1,6 +1,7 @@
 package com.ivarrace.gringotts.controller;
 
 import com.ivarrace.gringotts.dto.ErrorResponse;
+import com.ivarrace.gringotts.exception.IllegalGroupTypeException;
 import com.ivarrace.gringotts.exception.ObjectNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,5 +15,11 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> notFoundException(ObjectNotFoundException exception) {
         ErrorResponse errorResponse = new ErrorResponse(exception.getMessage());
         return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(value = IllegalGroupTypeException.class)
+    public ResponseEntity<ErrorResponse> illegalGroupType(IllegalGroupTypeException exception) {
+        ErrorResponse errorResponse = new ErrorResponse(exception.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 }

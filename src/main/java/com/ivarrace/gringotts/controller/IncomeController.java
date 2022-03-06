@@ -1,10 +1,16 @@
 package com.ivarrace.gringotts.controller;
 
-import com.ivarrace.gringotts.repository.model.Accounting;
-import com.ivarrace.gringotts.repository.model.AccountingCategory;
-import com.ivarrace.gringotts.repository.model.AccountingGroup;
-import com.ivarrace.gringotts.service.IncomeService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.ivarrace.gringotts.dto.request.CategoryRequest;
+import com.ivarrace.gringotts.dto.request.GroupRequest;
+import com.ivarrace.gringotts.dto.request.RecordRequest;
+import com.ivarrace.gringotts.dto.response.CategoryResponse;
+import com.ivarrace.gringotts.dto.response.GroupResponse;
+import com.ivarrace.gringotts.dto.response.AccountingResponse;
+import com.ivarrace.gringotts.dto.response.RecordResponse;
+import com.ivarrace.gringotts.repository.model.GroupType;
+import com.ivarrace.gringotts.service.CategoryService;
+import com.ivarrace.gringotts.service.GroupService;
+import com.ivarrace.gringotts.service.RecordService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,67 +19,118 @@ import java.util.List;
 @RequestMapping("/accounting/{accountingId}/income")
 public class IncomeController {
 
-    @Autowired
-    private IncomeService incomeService;
+    private final GroupService groupService;
+    private final CategoryService categoryService;
+    private final RecordService recordService;
+
+    public IncomeController(GroupService groupService,
+                            CategoryService categoryService,
+                            RecordService recordService) {
+        this.groupService = groupService;
+        this.categoryService = categoryService;
+        this.recordService = recordService;
+    }
 
     @GetMapping("/")
-    public List<AccountingGroup> findIncome(@PathVariable String accountingId) {
-        return incomeService.findAll(accountingId);
+    public List<GroupResponse> findIncome(@PathVariable String accountingId) {
+        return groupService.findAllByType(accountingId, GroupType.INCOME);
     }
 
     @GetMapping("/{groupId}")
-    public AccountingGroup findIncomeById(@PathVariable String accountingId, @PathVariable String groupId) {
-        return incomeService.findById(accountingId, groupId);
+    public GroupResponse findIncomeById(@PathVariable String accountingId, @PathVariable String groupId) {
+        return groupService.findById(accountingId, groupId);
     }
 
     @PostMapping("/")
-    public Accounting create(@PathVariable String accountingId, @RequestBody AccountingGroup group) {
-        return incomeService.create(accountingId, group);
+    public AccountingResponse createIncome(@PathVariable String accountingId,
+                                           @RequestBody GroupRequest request) {
+        return groupService.create(accountingId, GroupType.INCOME, request);
     }
 
     @DeleteMapping("/{groupId}")
-    public Accounting deleteIncome(@PathVariable String accountingId, @PathVariable String groupId) {
-        return incomeService.deleteById(accountingId, groupId);
+    public AccountingResponse deleteIncome(@PathVariable String accountingId, @PathVariable String groupId) {
+        return groupService.deleteById(accountingId, groupId);
     }
 
     @PutMapping("/{groupId}")
-    public Accounting put(@PathVariable String accountingId, @PathVariable String groupId,
-                          @RequestBody AccountingGroup group) {
-        return incomeService.modify(accountingId, groupId, group);
+    public AccountingResponse modifyIncome(@PathVariable String accountingId, @PathVariable String groupId,
+                                           @RequestBody GroupRequest request) {
+        return groupService.modify(accountingId, groupId, request);
     }
 
     @GetMapping("/{groupId}/categories/")
-    public List<AccountingCategory> findCategories(@PathVariable String accountingId, @PathVariable String groupId) {
-        return incomeService.findAllCategories(accountingId, groupId);
+    public List<CategoryResponse> findIncomeCategories(@PathVariable String accountingId,
+                                                       @PathVariable String groupId) {
+        return categoryService.findAllCategories(accountingId, groupId);
     }
 
     @GetMapping("/{groupId}/categories/{categoryId}")
-    public AccountingCategory findCategoryById(
+    public CategoryResponse findIncomeCategoryById(
             @PathVariable String accountingId,
             @PathVariable String groupId,
             @PathVariable String categoryId) {
-        return incomeService.findCategoryById(accountingId, groupId, categoryId);
+        return categoryService.findCategoryById(accountingId, groupId, categoryId);
     }
 
     @PostMapping("/{groupId}/categories/")
-    public Accounting createCategory(@PathVariable String accountingId,
-                                     @PathVariable String groupId,
-                                     @RequestBody AccountingCategory category) {
-        return incomeService.createCategory(accountingId, groupId, category);
+    public AccountingResponse createIncomeCategory(@PathVariable String accountingId,
+                                                   @PathVariable String groupId,
+                                                   @RequestBody CategoryRequest request) {
+        return categoryService.createCategory(accountingId, groupId, request);
     }
 
     @DeleteMapping("/{groupId}/categories/{categoryId}")
-    public Accounting deleteIncome(@PathVariable String accountingId,
-                                    @PathVariable String groupId,
-                                    @PathVariable String categoryId) {
-        return incomeService.deleteCategoryById(accountingId, groupId, categoryId);
+    public AccountingResponse deleteIncomeCategory(@PathVariable String accountingId,
+                                                   @PathVariable String groupId,
+                                                   @PathVariable String categoryId) {
+        return categoryService.deleteCategoryById(accountingId, groupId, categoryId);
     }
 
     @PutMapping("/{groupId}/categories/{categoryId}")
-    public Accounting putCategory(@PathVariable String accountingId,
-                                  @PathVariable String groupId,
-                                  @PathVariable String categoryId,
-                                  @RequestBody AccountingCategory category) {
-        return incomeService.modifyCategory(accountingId, groupId, categoryId, category);
+    public AccountingResponse modifyIncomeCategory(@PathVariable String accountingId,
+                                                   @PathVariable String groupId,
+                                                   @PathVariable String categoryId,
+                                                   @RequestBody CategoryRequest request) {
+        return categoryService.modifyCategory(accountingId, groupId, categoryId, request);
+    }
+
+    @GetMapping("/{groupId}/categories/{categoryId}/records")
+    public List<RecordResponse> findAllIncomeRecords(@PathVariable String accountingId,
+                                                     @PathVariable String groupId,
+                                                     @PathVariable String categoryId) {
+        return recordService.findAll(accountingId, groupId, categoryId);
+    }
+
+    @GetMapping("/{groupId}/categories/{categoryId}/records/{recordId}")
+    public RecordResponse findIncomeRecordById(@PathVariable String accountingId,
+                                 @PathVariable String groupId,
+                                 @PathVariable String categoryId,
+                                 @PathVariable String recordId){
+        return recordService.findById(accountingId, groupId, categoryId, recordId);
+    }
+
+    @PostMapping("/{groupId}/categories/{categoryId}/records")
+    public AccountingResponse createIncomeRecord(@PathVariable String accountingId,
+                                           @PathVariable String groupId,
+                                           @PathVariable String categoryId,
+                                           @RequestBody RecordRequest request) {
+        return recordService.create(accountingId, groupId, categoryId, request);
+    }
+
+    @DeleteMapping("/{groupId}/categories/{categoryId}/records/{recordId}")
+    public AccountingResponse deleteIncomeRecordById(@PathVariable String accountingId,
+                                               @PathVariable String groupId,
+                                               @PathVariable String categoryId,
+                                               @PathVariable String recordId){
+        return recordService.delete(accountingId, groupId, categoryId, recordId);
+    }
+
+    @PutMapping("/{groupId}/categories/{categoryId}/records/{recordId}")
+    public AccountingResponse modifyIncomeRecordById(@PathVariable String accountingId,
+                                               @PathVariable String groupId,
+                                               @PathVariable String categoryId,
+                                               @PathVariable String recordId,
+                                               @RequestBody RecordRequest request){
+        return recordService.modify(accountingId, groupId, categoryId, recordId, request);
     }
 }

@@ -1,8 +1,8 @@
-package com.ivarrace.gringotts.repository.model;
+package com.ivarrace.gringotts.dto.response;
 
 import java.util.Date;
 
-public class Record {
+public class RecordResponse {
 
     private String id;
     private Date date;

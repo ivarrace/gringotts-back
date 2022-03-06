@@ -18,8 +18,7 @@ public class Accounting {
     @LastModifiedDate
     private Date lastModified;
     private String name;
-    private List<AccountingGroup> expenses;
-    private List<AccountingGroup> income;
+    private List<Group> groups;
 
 
     public String getId() {
@@ -54,19 +53,11 @@ public class Accounting {
         this.name = name;
     }
 
-    public List<AccountingGroup> getExpenses() {
-        return expenses;
+    public List<Group> getGroups() {
+        return groups;
     }
 
-    public void setExpenses(List<AccountingGroup> expenses) {
-        this.expenses = expenses;
-    }
-
-    public List<AccountingGroup> getIncome() {
-        return income;
-    }
-
-    public void setIncome(List<AccountingGroup> income) {
-        this.income = income;
+    public void setGroups(List<Group> groups) {
+        this.groups = groups;
     }
 }

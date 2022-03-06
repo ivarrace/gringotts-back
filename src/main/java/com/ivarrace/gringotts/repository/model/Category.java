@@ -5,7 +5,7 @@ import org.springframework.data.annotation.CreatedDate;
 import java.util.Date;
 import java.util.List;
 
-public class AccountingCategory {
+public class Category {
 
     private String id;
     @CreatedDate
