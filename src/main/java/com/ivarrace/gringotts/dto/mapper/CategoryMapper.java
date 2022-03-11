@@ -1,5 +1,6 @@
 package com.ivarrace.gringotts.dto.mapper;
 
+import com.ivarrace.gringotts.dto.DtoUtils;
 import com.ivarrace.gringotts.dto.request.CategoryRequest;
 import com.ivarrace.gringotts.dto.response.CategoryResponse;
 import com.ivarrace.gringotts.repository.model.Category;
@@ -8,7 +9,6 @@ import org.springframework.stereotype.Component;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Component
@@ -38,7 +38,7 @@ public class CategoryMapper {
 
     public Category toNewEntity(CategoryRequest request) {
         Category entity = new Category();
-        entity.setId(UUID.randomUUID().toString());
+        entity.setId(DtoUtils.generateKey(request.getName()));
         entity.setCreatedDate(new Date());
         entity.setName(request.getName());
         entity.setRecords(Collections.emptyList());

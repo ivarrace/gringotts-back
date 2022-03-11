@@ -1,26 +1,26 @@
 package com.ivarrace.gringotts.dto;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 public class ErrorResponse {
 
     private String message;
-    private Date date;
+    private LocalDateTime date;
 
     public ErrorResponse(String message){
         this.message = message;
-        this.date = new Date();
+        this.date = LocalDateTime.now();
     }
 
     public String getMessage() {
         return message;
     }
 
-    public Date getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDateTime date) {
         this.date = date;
     }
 

@@ -1,5 +1,6 @@
 package com.ivarrace.gringotts.dto.response;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -9,6 +10,12 @@ public class GroupResponse {
     private Date createdDate;
     private String name;
     private List<CategoryResponse> categories;
+    private RecordsSummary recordsSummary;
+
+    public GroupResponse() {
+        this.categories = Collections.emptyList();
+        this.recordsSummary = new RecordsSummary();
+    }
 
     public Date getCreatedDate() {
         return createdDate;
@@ -40,5 +47,13 @@ public class GroupResponse {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public RecordsSummary getAnnualTotals() {
+        return recordsSummary;
+    }
+
+    public void setAnnualTotals(RecordsSummary recordsSummary) {
+        this.recordsSummary = recordsSummary;
     }
 }

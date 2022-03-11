@@ -1,18 +1,18 @@
 package com.ivarrace.gringotts.dto.request;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public class RecordRequest {
 
-    private Date date;
+    private LocalDate date;
     private double amount;
     private String info;
 
-    public Date getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 

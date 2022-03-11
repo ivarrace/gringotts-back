@@ -11,6 +11,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -98,7 +99,7 @@ class CategoryMapperTest {
     private Record newTestRecord() {
         Record record = new Record();
         record.setId("test-record");
-        record.setDate(new Date());
+        record.setDate(LocalDate.now());
         record.setAmount(42.00);
         record.setInfo("test-info");
         return record;

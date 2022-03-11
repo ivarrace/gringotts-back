@@ -1,11 +1,11 @@
 package com.ivarrace.gringotts.repository.model;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public class Record {
 
     private String id;
-    private Date date;
+    private LocalDate date;
     private double amount;
     private String info;
 
@@ -17,11 +17,11 @@ public class Record {
         this.id = id;
     }
 
-    public Date getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 

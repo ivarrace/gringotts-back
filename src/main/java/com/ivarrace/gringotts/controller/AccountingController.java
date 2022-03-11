@@ -6,6 +6,7 @@ import com.ivarrace.gringotts.service.AccountingService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController()
 @RequestMapping("/accounting")
@@ -23,7 +24,8 @@ public class AccountingController {
     }
 
     @GetMapping("/{accountingId}")
-    public AccountingResponse findAccountingById(@PathVariable String accountingId){
+    public AccountingResponse findAccountingById(@PathVariable String accountingId,
+                                                 @RequestParam Optional<Integer> year){
         return accountingService.findById(accountingId);
     }
 

@@ -8,8 +8,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.LocalDate;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -59,7 +59,7 @@ class RecordMapperTest {
         RecordRequest request = new RecordRequest();
         request.setAmount(42.42);
         request.setInfo("test");
-        request.setDate(new Date());
+        request.setDate(LocalDate.now());
         Record result = recordMapper.toNewEntity(request);
         assertEquals(request.getDate(), result.getDate());
         assertEquals(request.getInfo(), result.getInfo());
@@ -70,7 +70,7 @@ class RecordMapperTest {
     private Record newTestRecord() {
         Record record = new Record();
         record.setId("test-record");
-        record.setDate(new Date());
+        record.setDate(LocalDate.now());
         record.setAmount(42.00);
         record.setInfo("test-info");
         return record;

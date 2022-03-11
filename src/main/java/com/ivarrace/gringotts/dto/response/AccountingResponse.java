@@ -1,7 +1,6 @@
 package com.ivarrace.gringotts.dto.response;
 
 import java.util.Date;
-import java.util.List;
 
 public class AccountingResponse {
 
@@ -9,8 +8,13 @@ public class AccountingResponse {
     private Date createdDate;
     private Date lastModified;
     private String name;
-    private List<GroupResponse> expenses;
-    private List<GroupResponse> income;
+    private ReportResponse expenses;
+    private ReportResponse income;
+    private RecordsSummary savings;
+
+    public AccountingResponse() {
+        this.savings = new RecordsSummary();
+    }
 
     public String getId() {
         return id;
@@ -44,19 +48,27 @@ public class AccountingResponse {
         this.name = name;
     }
 
-    public List<GroupResponse> getExpenses() {
+    public ReportResponse getExpenses() {
         return expenses;
     }
 
-    public void setExpenses(List<GroupResponse> expenses) {
+    public void setExpenses(ReportResponse expenses) {
         this.expenses = expenses;
     }
 
-    public List<GroupResponse> getIncome() {
+    public ReportResponse getIncome() {
         return income;
     }
 
-    public void setIncome(List<GroupResponse> income) {
+    public void setIncome(ReportResponse income) {
         this.income = income;
+    }
+
+    public RecordsSummary getSavings() {
+        return savings;
+    }
+
+    public void setSavings(RecordsSummary savings) {
+        this.savings = savings;
     }
 }

@@ -1,10 +1,11 @@
 package com.ivarrace.gringotts.dto.mapper;
 
-import com.ivarrace.gringotts.dto.response.GroupResponse;
-import com.ivarrace.gringotts.repository.model.GroupType;
 import com.ivarrace.gringotts.dto.request.AccountingRequest;
 import com.ivarrace.gringotts.dto.response.AccountingResponse;
+import com.ivarrace.gringotts.dto.response.GroupResponse;
+import com.ivarrace.gringotts.dto.response.ReportResponse;
 import com.ivarrace.gringotts.repository.model.Accounting;
+import com.ivarrace.gringotts.repository.model.GroupType;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -13,7 +14,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
-public class AccountingMapper {
+public class AccountingMapper extends AnnualTotalsCalculator{
 
     private final GroupMapper groupMapper;
 
@@ -36,8 +37,9 @@ public class AccountingMapper {
                 income.add(groupMapper.toDto(group));
             }
         });
-        request.setExpenses(expenses);
-        request.setIncome(income);
+        request.setExpenses(new ReportResponse(expenses));
+        request.setIncome(new ReportResponse(income));
+        generateAnnualTotals(request);
         return request;
     }
 

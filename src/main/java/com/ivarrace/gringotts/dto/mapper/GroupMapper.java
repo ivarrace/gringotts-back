@@ -1,5 +1,6 @@
 package com.ivarrace.gringotts.dto.mapper;
 
+import com.ivarrace.gringotts.dto.DtoUtils;
 import com.ivarrace.gringotts.dto.request.GroupRequest;
 import com.ivarrace.gringotts.dto.response.GroupResponse;
 import com.ivarrace.gringotts.repository.model.Group;
@@ -9,7 +10,6 @@ import org.springframework.stereotype.Component;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Component
@@ -39,7 +39,7 @@ public class GroupMapper {
 
     public Group toNewEntity(GroupType groupType, GroupRequest request) {
         Group entity = new Group();
-        entity.setId(UUID.randomUUID().toString());
+        entity.setId(DtoUtils.generateKey(request.getName()));
         entity.setCreatedDate(new Date());
         entity.setName(request.getName());
         entity.setCategories(Collections.emptyList());

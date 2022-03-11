@@ -2,6 +2,7 @@ package com.ivarrace.gringotts.dto.mapper;
 
 import com.ivarrace.gringotts.dto.request.AccountingRequest;
 import com.ivarrace.gringotts.dto.response.AccountingResponse;
+import com.ivarrace.gringotts.dto.response.GroupResponse;
 import com.ivarrace.gringotts.repository.model.Accounting;
 import com.ivarrace.gringotts.repository.model.Group;
 import com.ivarrace.gringotts.repository.model.GroupType;
@@ -23,7 +24,7 @@ import static org.mockito.Mockito.*;
 class AccountingMapperTest {
 
     @Mock
-    GroupMapper groupMapper;
+    private GroupMapper groupMapper;
 
     private AccountingMapper accountingMapper;
 
@@ -40,8 +41,8 @@ class AccountingMapperTest {
         assertEquals(entity.getName(), result.getName());
         assertEquals(entity.getCreatedDate(), result.getCreatedDate());
         assertEquals(entity.getLastModified(), result.getLastModified());
-        assertEquals(0, result.getExpenses().size());
-        assertEquals(0, result.getIncome().size());
+        assertEquals(0, result.getExpenses().getGroups().size());
+        assertEquals(0, result.getIncome().getGroups().size());
         verify(groupMapper, times(0)).toDto(any());
     }
 
@@ -51,15 +52,17 @@ class AccountingMapperTest {
         Group expense = newTestGroup(GroupType.EXPENSES);
         Group income = newTestGroup(GroupType.INCOME);
         entity.setGroups(Arrays.asList(expense, income));
-        when(groupMapper.toDto(expense)).thenReturn(null);
-        when(groupMapper.toDto(income)).thenReturn(null);
+        GroupResponse expenseDto = new GroupResponse();
+        when(groupMapper.toDto(expense)).thenReturn(expenseDto);
+        GroupResponse incomeDto = new GroupResponse();
+        when(groupMapper.toDto(income)).thenReturn(incomeDto);
         AccountingResponse result = accountingMapper.toDto(entity);
         assertEquals(entity.getId(), result.getId());
         assertEquals(entity.getName(), result.getName());
         assertEquals(entity.getCreatedDate(), result.getCreatedDate());
         assertEquals(entity.getLastModified(), result.getLastModified());
-        assertEquals(1, result.getExpenses().size());
-        assertEquals(1, result.getIncome().size());
+        assertEquals(1, result.getExpenses().getGroups().size());
+        assertEquals(1, result.getIncome().getGroups().size());
         verify(groupMapper, times(2)).toDto(any());
     }
 
