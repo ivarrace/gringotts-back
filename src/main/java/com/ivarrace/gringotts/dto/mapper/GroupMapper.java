@@ -7,8 +7,8 @@ import com.ivarrace.gringotts.repository.model.Group;
 import com.ivarrace.gringotts.repository.model.GroupType;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -40,7 +40,7 @@ public class GroupMapper {
     public Group toNewEntity(GroupType groupType, GroupRequest request) {
         Group entity = new Group();
         entity.setId(DtoUtils.generateKey(request.getName()));
-        entity.setCreatedDate(new Date());
+        entity.setCreatedDate(LocalDateTime.now());
         entity.setName(request.getName());
         entity.setCategories(Collections.emptyList());
         entity.setType(groupType);

@@ -6,8 +6,8 @@ import com.ivarrace.gringotts.dto.response.CategoryResponse;
 import com.ivarrace.gringotts.repository.model.Category;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -39,7 +39,7 @@ public class CategoryMapper {
     public Category toNewEntity(CategoryRequest request) {
         Category entity = new Category();
         entity.setId(DtoUtils.generateKey(request.getName()));
-        entity.setCreatedDate(new Date());
+        entity.setCreatedDate(LocalDateTime.now());
         entity.setName(request.getName());
         entity.setRecords(Collections.emptyList());
         return entity;

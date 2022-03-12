@@ -12,6 +12,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -92,7 +93,7 @@ class GroupMapperTest {
         Group group = new Group();
         group.setId("test-expense");
         group.setName("test-expense");
-        group.setCreatedDate(new Date());
+        group.setCreatedDate(LocalDateTime.now());
         group.setType(GroupType.EXPENSES);
         group.setCategories(Collections.emptyList());
         return group;
@@ -102,7 +103,7 @@ class GroupMapperTest {
         Category category = new Category();
         category.setId("test-category");
         category.setName("test-category");
-        category.setCreatedDate(new Date());
+        category.setCreatedDate(LocalDateTime.now());
         category.setRecords(Collections.emptyList());
         return category;
     }

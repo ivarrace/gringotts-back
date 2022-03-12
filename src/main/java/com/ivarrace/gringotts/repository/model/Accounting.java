@@ -5,7 +5,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Document(collection = "accounting")
@@ -14,9 +14,9 @@ public class Accounting {
     @Id
     private String id;
     @CreatedDate
-    private Date createdDate;
+    private LocalDateTime createdDate;
     @LastModifiedDate
-    private Date lastModified;
+    private LocalDateTime lastModified;
     private String name;
     private List<Group> groups;
 
@@ -29,19 +29,19 @@ public class Accounting {
         this.id = id;
     }
 
-    public Date getCreatedDate() {
+    public LocalDateTime getCreatedDate() {
         return createdDate;
     }
 
-    public void setCreatedDate(Date createdDate) {
+    public void setCreatedDate(LocalDateTime createdDate) {
         this.createdDate = createdDate;
     }
 
-    public Date getLastModified() {
+    public LocalDateTime getLastModified() {
         return lastModified;
     }
 
-    public void setLastModified(Date lastModified) {
+    public void setLastModified(LocalDateTime lastModified) {
         this.lastModified = lastModified;
     }
 

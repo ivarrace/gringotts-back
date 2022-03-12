@@ -2,14 +2,14 @@ package com.ivarrace.gringotts.repository.model;
 
 import org.springframework.data.annotation.CreatedDate;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class Category {
 
     private String id;
     @CreatedDate
-    private Date createdDate;
+    private LocalDateTime createdDate;
     private String name;
     private List<Record> records;
 
@@ -21,11 +21,11 @@ public class Category {
         this.id = id;
     }
 
-    public Date getCreatedDate() {
+    public LocalDateTime getCreatedDate() {
         return createdDate;
     }
 
-    public void setCreatedDate(Date createdDate) {
+    public void setCreatedDate(LocalDateTime createdDate) {
         this.createdDate = createdDate;
     }
 

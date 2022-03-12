@@ -1,12 +1,12 @@
 package com.ivarrace.gringotts.dto.response;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 public class AccountingResponse {
 
     private String id;
-    private Date createdDate;
-    private Date lastModified;
+    private LocalDateTime createdDate;
+    private LocalDateTime lastModified;
     private String name;
     private ReportResponse expenses;
     private ReportResponse income;
@@ -24,19 +24,19 @@ public class AccountingResponse {
         this.id = id;
     }
 
-    public Date getCreatedDate() {
+    public LocalDateTime getCreatedDate() {
         return createdDate;
     }
 
-    public void setCreatedDate(Date createdDate) {
+    public void setCreatedDate(LocalDateTime createdDate) {
         this.createdDate = createdDate;
     }
 
-    public Date getLastModified() {
+    public LocalDateTime getLastModified() {
         return lastModified;
     }
 
-    public void setLastModified(Date lastModified) {
+    public void setLastModified(LocalDateTime lastModified) {
         this.lastModified = lastModified;
     }
 

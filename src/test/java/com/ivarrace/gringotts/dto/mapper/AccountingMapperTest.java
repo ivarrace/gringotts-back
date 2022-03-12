@@ -12,9 +12,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -100,8 +100,8 @@ class AccountingMapperTest {
         Accounting entity = new Accounting();
         entity.setId("test-id");
         entity.setName("test-accounting");
-        entity.setCreatedDate(new Date());
-        entity.setLastModified(new Date());
+        entity.setCreatedDate(LocalDateTime.now());
+        entity.setLastModified(LocalDateTime.now());
         entity.setGroups(Collections.emptyList());
         return entity;
     }
@@ -110,7 +110,7 @@ class AccountingMapperTest {
         Group group = new Group();
         group.setId("test-" + type.name());
         group.setName("test-" + type.name());
-        group.setCreatedDate(new Date());
+        group.setCreatedDate(LocalDateTime.now());
         group.setType(type);
         group.setCategories(Collections.emptyList());
         return group;

@@ -12,6 +12,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -91,7 +92,7 @@ class CategoryMapperTest {
         Category category = new Category();
         category.setId("test-category");
         category.setName("test-category");
-        category.setCreatedDate(new Date());
+        category.setCreatedDate(LocalDateTime.now());
         category.setRecords(Collections.emptyList());
         return category;
     }

@@ -28,6 +28,7 @@ public class AccountingService {
     }
 
     public AccountingResponse findById(String id) {
+        //TODO find by year
         return accountingMapper.toDto(accountingUtils.findAccountingEntity(id));
     }
 

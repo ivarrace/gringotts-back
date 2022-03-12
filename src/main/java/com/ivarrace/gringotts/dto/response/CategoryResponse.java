@@ -1,12 +1,12 @@
 package com.ivarrace.gringotts.dto.response;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 public class CategoryResponse {
     private String id;
-    private Date createdDate;
+    private LocalDateTime createdDate;
     private String name;
     private List<RecordResponse> records;
     private RecordsSummary recordsSummary;
@@ -24,11 +24,11 @@ public class CategoryResponse {
         this.id = id;
     }
 
-    public Date getCreatedDate() {
+    public LocalDateTime getCreatedDate() {
         return createdDate;
     }
 
-    public void setCreatedDate(Date createdDate) {
+    public void setCreatedDate(LocalDateTime createdDate) {
         this.createdDate = createdDate;
     }
 

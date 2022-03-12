@@ -18,21 +18,19 @@ public class AnnualTotalsCalculator {
         RecordsSummary recordsSummary = new RecordsSummary();
         double total = 0;
         if (accounting.getExpenses() != null) {
-            accounting.getExpenses().getAnnualTotals().getMonthly().forEach((month, ammount) -> {
-                Double actual = recordsSummary.getMonthly().get(month);
-                recordsSummary.getMonthly().put(month, actual - ammount);
-            });
+            accounting.getExpenses().getAnnualTotals().getMonthly().forEach((month, amount) ->
+                    recordsSummary.getMonthly().merge(month, -amount, Double::sum)
+            );
             total -= accounting.getExpenses().getAnnualTotals().getTotal();
         }
         if (accounting.getIncome() != null) {
-            accounting.getIncome().getAnnualTotals().getMonthly().forEach((month, ammount) -> {
-                Double actual = recordsSummary.getMonthly().get(month);
-                recordsSummary.getMonthly().put(month, actual + ammount);
-            });
+            accounting.getIncome().getAnnualTotals().getMonthly().forEach((month, amount) ->
+                    recordsSummary.getMonthly().merge(month, amount, Double::sum)
+            );
             total += accounting.getIncome().getAnnualTotals().getTotal();
         }
         recordsSummary.setTotal(total);
-        recordsSummary.setAverage(recordsSummary.getTotal() / recordsSummary.getMonthly().keySet().size());
+        recordsSummary.setAverage(total / recordsSummary.getMonthly().keySet().size());
         return recordsSummary;
     }
 
@@ -40,12 +38,10 @@ public class AnnualTotalsCalculator {
         RecordsSummary recordsSummary = new RecordsSummary();
         reportResponse.getGroups().forEach(group -> {
             group.setAnnualTotals(getGroupAnnualTotals(group));
-            group.getAnnualTotals().getMonthly().forEach((month, amount) -> {
-                Double actual = recordsSummary.getMonthly().get(month);
-                recordsSummary.getMonthly().put(month, actual + amount);
-            });
-            double actual = recordsSummary.getTotal();
-            recordsSummary.setTotal(actual + group.getAnnualTotals().getTotal());
+            group.getAnnualTotals().getMonthly().forEach((month, amount) ->
+                    recordsSummary.getMonthly().merge(month, amount, Double::sum)
+            );
+            recordsSummary.setTotal(recordsSummary.getTotal() + group.getAnnualTotals().getTotal());
 
         });
         recordsSummary.setAverage(recordsSummary.getTotal() / recordsSummary.getMonthly().keySet().size());
@@ -56,12 +52,10 @@ public class AnnualTotalsCalculator {
         RecordsSummary recordsSummary = new RecordsSummary();
         group.getCategories().forEach(category -> {
             category.setAnnualTotals(getCategoryAnnualTotals(category));
-            category.getAnnualTotals().getMonthly().forEach((month, ammount) -> {
-                Double actual = recordsSummary.getMonthly().get(month);
-                recordsSummary.getMonthly().put(month, actual + ammount);
-            });
-            double actual = recordsSummary.getTotal();
-            recordsSummary.setTotal(actual + category.getAnnualTotals().getTotal());
+            category.getAnnualTotals().getMonthly().forEach((month, amount) ->
+                    recordsSummary.getMonthly().merge(month, amount, Double::sum)
+            );
+            recordsSummary.setTotal(recordsSummary.getTotal() + category.getAnnualTotals().getTotal());
 
         });
         recordsSummary.setAverage(recordsSummary.getTotal() / recordsSummary.getMonthly().keySet().size());
@@ -71,10 +65,8 @@ public class AnnualTotalsCalculator {
     private RecordsSummary getCategoryAnnualTotals(CategoryResponse category) {
         RecordsSummary recordsSummary = new RecordsSummary();
         category.getRecords().forEach(item -> {
-            Double actual = recordsSummary.getMonthly().get(item.getDate().getMonth());
-            recordsSummary.getMonthly().put(item.getDate().getMonth(), actual + item.getAmount());
+            recordsSummary.getMonthly().merge(item.getDate().getMonth(), item.getAmount(), Double::sum);
             recordsSummary.setTotal(recordsSummary.getTotal() + item.getAmount());
-
         });
         recordsSummary.setAverage(recordsSummary.getTotal() / recordsSummary.getMonthly().keySet().size());
         return recordsSummary;
