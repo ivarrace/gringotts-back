@@ -2,42 +2,44 @@ package com.ivarrace.gringotts.dto.mapper;
 
 import com.ivarrace.gringotts.dto.response.*;
 
-public class AnnualTotalsCalculator {
+public class AnnualSummaryGenerator {
 
-    public void generateAnnualTotals(AccountingResponse accounting) {
-        if (accounting.getExpenses() != null) {
-            accounting.getExpenses().setAnnualTotals(getReportAnnualTotals(accounting.getExpenses()));
-        }
-        if (accounting.getIncome() != null) {
-            accounting.getIncome().setAnnualTotals(getReportAnnualTotals(accounting.getIncome()));
-        }
-        accounting.setSavings(getAccountingSavings(accounting));
+    public void generateAnnualSummary(AccountingResponse accounting) {
+        accounting.getExpenses().ifPresent(
+                expenses -> expenses.setAnnualTotals(generateReportAnnualSummary(expenses))
+        );
+        accounting.getIncome().ifPresent(
+                income -> income.setAnnualTotals(generateReportAnnualSummary(income))
+        );
+        accounting.setSavings(generateSavingsSummary(accounting));
     }
 
-    private RecordsSummary getAccountingSavings(AccountingResponse accounting) {
+    private RecordsSummary generateSavingsSummary(AccountingResponse accounting) {
         RecordsSummary recordsSummary = new RecordsSummary();
         double total = 0;
-        if (accounting.getExpenses() != null) {
-            accounting.getExpenses().getAnnualTotals().getMonthly().forEach((month, amount) ->
+        if(accounting.getExpenses().isPresent()){
+            ReportResponse expenses = accounting.getExpenses().get();
+            expenses.getAnnualTotals().getMonthly().forEach((month, amount) ->
                     recordsSummary.getMonthly().merge(month, -amount, Double::sum)
             );
-            total -= accounting.getExpenses().getAnnualTotals().getTotal();
+            total -= expenses.getAnnualTotals().getTotal();
         }
-        if (accounting.getIncome() != null) {
-            accounting.getIncome().getAnnualTotals().getMonthly().forEach((month, amount) ->
+        if(accounting.getIncome().isPresent()){
+            ReportResponse income = accounting.getIncome().get();
+            income.getAnnualTotals().getMonthly().forEach((month, amount) ->
                     recordsSummary.getMonthly().merge(month, amount, Double::sum)
             );
-            total += accounting.getIncome().getAnnualTotals().getTotal();
+            total += income.getAnnualTotals().getTotal();
         }
         recordsSummary.setTotal(total);
         recordsSummary.setAverage(total / recordsSummary.getMonthly().keySet().size());
         return recordsSummary;
     }
 
-    private RecordsSummary getReportAnnualTotals(ReportResponse reportResponse) {
+    private RecordsSummary generateReportAnnualSummary(ReportResponse reportResponse) {
         RecordsSummary recordsSummary = new RecordsSummary();
         reportResponse.getGroups().forEach(group -> {
-            group.setAnnualTotals(getGroupAnnualTotals(group));
+            group.setAnnualTotals(generateGroupAnnualSummary(group));
             group.getAnnualTotals().getMonthly().forEach((month, amount) ->
                     recordsSummary.getMonthly().merge(month, amount, Double::sum)
             );
@@ -48,10 +50,10 @@ public class AnnualTotalsCalculator {
         return recordsSummary;
     }
 
-    private RecordsSummary getGroupAnnualTotals(GroupResponse group) {
+    private RecordsSummary generateGroupAnnualSummary(GroupResponse group) {
         RecordsSummary recordsSummary = new RecordsSummary();
         group.getCategories().forEach(category -> {
-            category.setAnnualTotals(getCategoryAnnualTotals(category));
+            category.setAnnualTotals(generateCategoryAnnualSummary(category));
             category.getAnnualTotals().getMonthly().forEach((month, amount) ->
                     recordsSummary.getMonthly().merge(month, amount, Double::sum)
             );
@@ -62,7 +64,7 @@ public class AnnualTotalsCalculator {
         return recordsSummary;
     }
 
-    private RecordsSummary getCategoryAnnualTotals(CategoryResponse category) {
+    private RecordsSummary generateCategoryAnnualSummary(CategoryResponse category) {
         RecordsSummary recordsSummary = new RecordsSummary();
         category.getRecords().forEach(item -> {
             recordsSummary.getMonthly().merge(item.getDate().getMonth(), item.getAmount(), Double::sum);

@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
-public class AccountingMapper extends AnnualTotalsCalculator{
+public class AccountingMapper extends AnnualSummaryGenerator {
 
     private final GroupMapper groupMapper;
 
@@ -39,7 +39,7 @@ public class AccountingMapper extends AnnualTotalsCalculator{
         });
         request.setExpenses(new ReportResponse(expenses));
         request.setIncome(new ReportResponse(income));
-        generateAnnualTotals(request);
+        generateAnnualSummary(request);
         return request;
     }
 

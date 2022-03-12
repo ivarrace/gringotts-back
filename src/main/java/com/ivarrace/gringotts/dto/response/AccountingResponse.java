@@ -1,6 +1,7 @@
 package com.ivarrace.gringotts.dto.response;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 public class AccountingResponse {
 
@@ -8,13 +9,9 @@ public class AccountingResponse {
     private LocalDateTime createdDate;
     private LocalDateTime lastModified;
     private String name;
-    private ReportResponse expenses;
-    private ReportResponse income;
+    private Optional<ReportResponse> expenses;
+    private Optional<ReportResponse> income;
     private RecordsSummary savings;
-
-    public AccountingResponse() {
-        this.savings = new RecordsSummary();
-    }
 
     public String getId() {
         return id;
@@ -48,20 +45,20 @@ public class AccountingResponse {
         this.name = name;
     }
 
-    public ReportResponse getExpenses() {
+    public Optional<ReportResponse> getExpenses() {
         return expenses;
     }
 
     public void setExpenses(ReportResponse expenses) {
-        this.expenses = expenses;
+        this.expenses = Optional.of(expenses);
     }
 
-    public ReportResponse getIncome() {
+    public Optional<ReportResponse> getIncome() {
         return income;
     }
 
     public void setIncome(ReportResponse income) {
-        this.income = income;
+        this.income = Optional.of(income);
     }
 
     public RecordsSummary getSavings() {

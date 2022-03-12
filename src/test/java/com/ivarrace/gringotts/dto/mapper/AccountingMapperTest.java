@@ -41,8 +41,10 @@ class AccountingMapperTest {
         assertEquals(entity.getName(), result.getName());
         assertEquals(entity.getCreatedDate(), result.getCreatedDate());
         assertEquals(entity.getLastModified(), result.getLastModified());
-        assertEquals(0, result.getExpenses().getGroups().size());
-        assertEquals(0, result.getIncome().getGroups().size());
+        assertTrue(result.getExpenses().isPresent());
+        assertEquals(0, result.getExpenses().get().getGroups().size());
+        assertTrue(result.getIncome().isPresent());
+        assertEquals(0, result.getIncome().get().getGroups().size());
         verify(groupMapper, times(0)).toDto(any());
     }
 
@@ -61,8 +63,10 @@ class AccountingMapperTest {
         assertEquals(entity.getName(), result.getName());
         assertEquals(entity.getCreatedDate(), result.getCreatedDate());
         assertEquals(entity.getLastModified(), result.getLastModified());
-        assertEquals(1, result.getExpenses().getGroups().size());
-        assertEquals(1, result.getIncome().getGroups().size());
+        assertTrue(result.getExpenses().isPresent());
+        assertEquals(1, result.getExpenses().get().getGroups().size());
+        assertTrue(result.getIncome().isPresent());
+        assertEquals(1, result.getIncome().get().getGroups().size());
         verify(groupMapper, times(2)).toDto(any());
     }
 
