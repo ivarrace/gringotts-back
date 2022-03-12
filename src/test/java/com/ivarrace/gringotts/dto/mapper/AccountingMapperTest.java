@@ -37,7 +37,7 @@ class AccountingMapperTest {
     void toDto_empty_groups() {
         Accounting entity = newTestAccounting();
         AccountingResponse result = accountingMapper.toDto(entity);
-        assertEquals(entity.getId(), result.getId());
+        assertEquals(entity.getKey(), result.getId());
         assertEquals(entity.getName(), result.getName());
         assertEquals(entity.getCreatedDate(), result.getCreatedDate());
         assertEquals(entity.getLastModified(), result.getLastModified());
@@ -59,7 +59,7 @@ class AccountingMapperTest {
         GroupResponse incomeDto = new GroupResponse();
         when(groupMapper.toDto(income)).thenReturn(incomeDto);
         AccountingResponse result = accountingMapper.toDto(entity);
-        assertEquals(entity.getId(), result.getId());
+        assertEquals(entity.getKey(), result.getId());
         assertEquals(entity.getName(), result.getName());
         assertEquals(entity.getCreatedDate(), result.getCreatedDate());
         assertEquals(entity.getLastModified(), result.getLastModified());
