@@ -1,5 +1,6 @@
 package com.ivarrace.gringotts.dto.mapper;
 
+import com.ivarrace.gringotts.dto.DtoUtils;
 import com.ivarrace.gringotts.dto.request.AccountingRequest;
 import com.ivarrace.gringotts.dto.response.AccountingResponse;
 import com.ivarrace.gringotts.dto.response.GroupResponse;
@@ -24,7 +25,7 @@ public class AccountingMapper extends AnnualSummaryGenerator {
 
     public AccountingResponse toDto(Accounting accounting) {
         AccountingResponse request = new AccountingResponse();
-        request.setId(accounting.getId());
+        request.setId(accounting.getKey());
         request.setName(accounting.getName());
         request.setCreatedDate(accounting.getCreatedDate());
         request.setLastModified(accounting.getLastModified());
@@ -52,6 +53,7 @@ public class AccountingMapper extends AnnualSummaryGenerator {
 
     public Accounting toNewEntity(AccountingRequest accounting) {
         Accounting request = new Accounting();
+        request.setKey(DtoUtils.generateKey(accounting.getName()));
         request.setName(accounting.getName());
         request.setGroups(Collections.emptyList());
         return request;

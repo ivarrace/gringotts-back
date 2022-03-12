@@ -13,6 +13,7 @@ public class Accounting {
 
     @Id
     private String id;
+    private String key;
     @CreatedDate
     private LocalDateTime createdDate;
     @LastModifiedDate
@@ -59,5 +60,13 @@ public class Accounting {
 
     public void setGroups(List<Group> groups) {
         this.groups = groups;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
     }
 }

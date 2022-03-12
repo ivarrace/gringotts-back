@@ -3,6 +3,8 @@ package com.ivarrace.gringotts.controller;
 import com.ivarrace.gringotts.dto.request.AccountingRequest;
 import com.ivarrace.gringotts.dto.response.AccountingResponse;
 import com.ivarrace.gringotts.service.AccountingService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,7 +28,7 @@ public class AccountingController {
     @GetMapping("/{accountingId}")
     public AccountingResponse findAccountingById(@PathVariable String accountingId,
                                                  @RequestParam Optional<Integer> year){
-        return accountingService.findById(accountingId);
+        return accountingService.findByKey(accountingId);
     }
 
     @PostMapping("/")
@@ -35,8 +37,9 @@ public class AccountingController {
     }
 
     @PutMapping("/{accountingId}")
-    public AccountingResponse modifyAccounting(@PathVariable String accountingId, @RequestBody AccountingRequest accounting){
-        return accountingService.modify(accountingId, accounting);
+    public ResponseEntity<String> modifyAccounting(@PathVariable String accountingId, @RequestBody AccountingRequest accounting){
+        accountingService.modify(accountingId, accounting);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @DeleteMapping("/{accountingId}")

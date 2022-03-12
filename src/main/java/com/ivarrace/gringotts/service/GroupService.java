@@ -33,32 +33,32 @@ public class GroupService {
     }
 
     public List<GroupResponse> findAllByType(String accountingId, GroupType type) {
-        return groupMapper.toDtoList(accountingUtils.findAccountingEntity(accountingId).getGroups().stream()
+        return groupMapper.toDtoList(accountingUtils.findAccountingEntityByKey(accountingId).getGroups().stream()
                 .filter(group -> group.getType().equals(type)).collect(Collectors.toList()));
     }
 
     public GroupResponse findById(String accountingId, String groupId) {
-        Accounting accounting = accountingUtils.findAccountingEntity(accountingId);
+        Accounting accounting = accountingUtils.findAccountingEntityByKey(accountingId);
         return groupMapper.toDto(accountingUtils.findAccountingGroup(accounting, groupId));
     }
 
     public AccountingResponse create(String accountingId, GroupType groupType,
                                      GroupRequest groupRequest) {
-        Accounting actual = accountingUtils.findAccountingEntity(accountingId);
+        Accounting actual = accountingUtils.findAccountingEntityByKey(accountingId);
         Group group = groupMapper.toNewEntity(groupType, groupRequest);
         actual.getGroups().add(group);
         return accountingMapper.toDto(accountingRepository.save(actual));
     }
 
     public AccountingResponse deleteById(String accountingId, String groupId) {
-        Accounting accounting = accountingUtils.findAccountingEntity(accountingId);
+        Accounting accounting = accountingUtils.findAccountingEntityByKey(accountingId);
         accountingUtils.findAccountingGroup(accounting, groupId);
         accounting.getGroups().removeIf(group -> groupId.equals(group.getId()));
         return accountingMapper.toDto(accountingRepository.save(accounting));
     }
 
     public AccountingResponse modify(String accountingId, String groupId, GroupRequest groupRequest) {
-        Accounting accounting = accountingUtils.findAccountingEntity(accountingId);
+        Accounting accounting = accountingUtils.findAccountingEntityByKey(accountingId);
         Group actualGroup = accountingUtils.findAccountingGroup(accounting, groupId);
         actualGroup.setName(groupRequest.getName());
         return accountingMapper.toDto(accountingRepository.save(accounting));

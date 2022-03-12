@@ -17,8 +17,8 @@ public class AccountingUtils {
         this.accountingRepository = accountingRepository;
     }
 
-    public Accounting findAccountingEntity(String accountingId) {
-        return accountingRepository.findById(accountingId).orElseThrow(() -> new ObjectNotFoundException("Accounting" + "[" + accountingId + "]"));
+    public Accounting findAccountingEntityByKey(String key) {
+        return accountingRepository.findByKey(key).orElseThrow(() -> new ObjectNotFoundException("Accounting" + "[" + key + "]"));
     }
 
     public Group findAccountingGroup(Accounting accounting, String groupId) {

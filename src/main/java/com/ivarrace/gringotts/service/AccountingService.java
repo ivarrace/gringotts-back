@@ -1,8 +1,10 @@
 package com.ivarrace.gringotts.service;
 
+import com.ivarrace.gringotts.dto.DtoUtils;
 import com.ivarrace.gringotts.dto.mapper.AccountingMapper;
 import com.ivarrace.gringotts.dto.request.AccountingRequest;
 import com.ivarrace.gringotts.dto.response.AccountingResponse;
+import com.ivarrace.gringotts.exception.ObjectAlreadyExistsException;
 import com.ivarrace.gringotts.repository.AccountingRepository;
 import com.ivarrace.gringotts.repository.model.Accounting;
 import org.springframework.stereotype.Service;
@@ -27,23 +29,31 @@ public class AccountingService {
         return accountingMapper.toDtoList(accountingRepository.findAll());
     }
 
-    public AccountingResponse findById(String id) {
-        //TODO find by year
-        return accountingMapper.toDto(accountingUtils.findAccountingEntity(id));
+    public AccountingResponse findByKey(String key) {
+        return accountingMapper.toDto(accountingUtils.findAccountingEntityByKey(key));
     }
 
     public AccountingResponse create(AccountingRequest accounting) {
-        return accountingMapper.toDto(accountingRepository.save(accountingMapper.toNewEntity(accounting)));
+        Accounting entity = accountingMapper.toNewEntity(accounting);
+        if(!accountingRepository.findByKey(entity.getKey()).isEmpty()){
+            throw new ObjectAlreadyExistsException(entity.getKey());
+        }
+        return accountingMapper.toDto(accountingRepository.save(entity));
     }
 
-    public void deleteById(String id) {
-        accountingRepository.delete(accountingUtils.findAccountingEntity(id));
+    public void deleteById(String key) {
+        accountingRepository.delete(accountingUtils.findAccountingEntityByKey(key));
     }
 
-    public AccountingResponse modify(String id, AccountingRequest accounting) {
-        Accounting actual = accountingUtils.findAccountingEntity(id);
+    public void modify(String key, AccountingRequest accounting) {
+        Accounting actual = accountingUtils.findAccountingEntityByKey(key);
+        String newKey = DtoUtils.generateKey(accounting.getName());
+        if(!accountingRepository.findByKey(newKey).isEmpty()){
+            throw new ObjectAlreadyExistsException(newKey);
+        }
+        actual.setKey(newKey);
         actual.setName(accounting.getName());
-        return accountingMapper.toDto(accountingRepository.save(actual));
+        accountingMapper.toDto(accountingRepository.save(actual));
     }
 
 }

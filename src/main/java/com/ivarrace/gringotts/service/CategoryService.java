@@ -32,17 +32,17 @@ public class CategoryService {
     }
 
     public List<CategoryResponse> findAllCategories(String accountingId, String groupId) {
-        Accounting accounting = accountingUtils.findAccountingEntity(accountingId);
+        Accounting accounting = accountingUtils.findAccountingEntityByKey(accountingId);
         return categoryMapper.toDtoList(accountingUtils.findAccountingGroup(accounting, groupId).getCategories());
     }
 
     public CategoryResponse findCategoryById(String accountingId, String groupId, String categoryId) {
-        Accounting accounting = accountingUtils.findAccountingEntity(accountingId);
+        Accounting accounting = accountingUtils.findAccountingEntityByKey(accountingId);
         return categoryMapper.toDto(accountingUtils.findAccountingCategory(accounting, groupId, categoryId));
     }
 
     public AccountingResponse createCategory(String accountingId, String groupId, CategoryRequest categoryRequest) {
-        Accounting accounting = accountingUtils.findAccountingEntity(accountingId);
+        Accounting accounting = accountingUtils.findAccountingEntityByKey(accountingId);
         Group group = accountingUtils.findAccountingGroup(accounting, groupId);
         Category category = categoryMapper.toNewEntity(categoryRequest);
         group.getCategories().add(category);
@@ -50,7 +50,7 @@ public class CategoryService {
     }
 
     public AccountingResponse deleteCategoryById(String accountingId, String groupId, String categoryId) {
-        Accounting accounting = accountingUtils.findAccountingEntity(accountingId);
+        Accounting accounting = accountingUtils.findAccountingEntityByKey(accountingId);
         Group group = accountingUtils.findAccountingGroup(accounting, groupId);
         accountingUtils.findAccountingCategory(accounting, groupId, categoryId);
         group.getCategories().removeIf(item -> categoryId.equals(item.getId()));
@@ -59,7 +59,7 @@ public class CategoryService {
 
     public AccountingResponse modifyCategory(String accountingId, String groupId, String categoryId,
                                      CategoryRequest categoryRequest) {
-        Accounting accounting = accountingUtils.findAccountingEntity(accountingId);
+        Accounting accounting = accountingUtils.findAccountingEntityByKey(accountingId);
         Category category = accountingUtils.findAccountingCategory(accounting, groupId, categoryId);
         category.setName(categoryRequest.getName());
         return accountingMapper.toDto(accountingRepository.save(accounting));
