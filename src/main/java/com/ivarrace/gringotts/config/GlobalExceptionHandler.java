@@ -1,4 +1,4 @@
-package com.ivarrace.gringotts.controller;
+package com.ivarrace.gringotts.config;
 
 import com.ivarrace.gringotts.dto.ErrorResponse;
 import com.ivarrace.gringotts.exception.IllegalGroupTypeException;
@@ -6,6 +6,7 @@ import com.ivarrace.gringotts.exception.ObjectAlreadyExistsException;
 import com.ivarrace.gringotts.exception.ObjectNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -29,4 +30,11 @@ public class GlobalExceptionHandler {
         ErrorResponse errorResponse = new ErrorResponse(exception.getMessage());
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(value = BadCredentialsException.class)
+    public ResponseEntity<ErrorResponse> badCredentials(BadCredentialsException exception) {
+        ErrorResponse errorResponse = new ErrorResponse(exception.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
+    }
+
 }
