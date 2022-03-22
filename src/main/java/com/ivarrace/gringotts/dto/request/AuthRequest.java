@@ -1,5 +1,8 @@
 package com.ivarrace.gringotts.dto.request;
 
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+
 public class AuthRequest {
 
     private String username;
@@ -19,5 +22,11 @@ public class AuthRequest {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Authentication buildAuthenticationToken() {
+        return new UsernamePasswordAuthenticationToken(
+               this.username, this.password
+        );
     }
 }

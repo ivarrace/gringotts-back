@@ -5,7 +5,6 @@ import com.ivarrace.gringotts.dto.request.AuthRequest;
 import com.ivarrace.gringotts.dto.response.AuthResponse;
 import com.ivarrace.gringotts.repository.model.users.User;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,11 +29,7 @@ public class AuthController {
     @PostMapping("/login")
     public AuthResponse auth(@RequestBody @Valid AuthRequest request) {
         Authentication authenticate = authenticationManager
-                .authenticate(
-                        new UsernamePasswordAuthenticationToken(
-                                request.getUsername(), request.getPassword()
-                        )
-                ); //test - test
+                .authenticate(request.buildAuthenticationToken());
         User user = (User) authenticate.getPrincipal();
         AuthResponse response = new AuthResponse();
         String token = jwtTokenUtil.generateAccessToken(user);

@@ -8,7 +8,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.ivarrace.gringotts.repository.UserRepository;
+import com.ivarrace.gringotts.service.AuthService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -23,12 +23,12 @@ import static org.apache.logging.log4j.util.Strings.isEmpty;
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
     private final JwtTokenUtil jwtTokenUtil;
-    private final UserRepository userRepository;
+    private final AuthService authService;
 
     public JwtAuthorizationFilter(JwtTokenUtil jwtTokenUtil,
-                                  UserRepository userRepository){
+                                  AuthService authService){
         this.jwtTokenUtil = jwtTokenUtil;
-        this.userRepository = userRepository;
+        this.authService = authService;
     }
 
     @Override
@@ -51,9 +51,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         }
 
         // Get user identity and set it on the spring security context
-        UserDetails userDetails = userRepository
-                .findByUsername(jwtTokenUtil.getUsername(token))
-                .orElse(null);
+        UserDetails userDetails = authService.loadUserByUsername(jwtTokenUtil.getUsername(token));
 
         UsernamePasswordAuthenticationToken
                 authentication = new UsernamePasswordAuthenticationToken(
