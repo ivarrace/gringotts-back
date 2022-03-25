@@ -27,6 +27,7 @@ public class GroupMapper {
         dto.setName(entity.getName());
         dto.setCreatedDate(entity.getCreatedDate());
         dto.setCategories(categoryMapper.toDtoList(entity.getCategories()));
+        dto.setType(entity.getType());
         return dto;
     }
 

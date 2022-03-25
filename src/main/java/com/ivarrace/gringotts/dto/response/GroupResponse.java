@@ -1,5 +1,7 @@
 package com.ivarrace.gringotts.dto.response;
 
+import com.ivarrace.gringotts.repository.model.GroupType;
+
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
@@ -11,6 +13,7 @@ public class GroupResponse {
     private String name;
     private List<CategoryResponse> categories;
     private RecordsSummary recordsSummary;
+    private GroupType type;
 
     public GroupResponse() {
         this.categories = Collections.emptyList();
@@ -55,5 +58,13 @@ public class GroupResponse {
 
     public void setAnnualTotals(RecordsSummary recordsSummary) {
         this.recordsSummary = recordsSummary;
+    }
+
+    public GroupType getType() {
+        return type;
+    }
+
+    public void setType(GroupType type) {
+        this.type = type;
     }
 }

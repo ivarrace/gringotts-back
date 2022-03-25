@@ -1,5 +1,6 @@
 package com.ivarrace.gringotts.service;
 
+import com.ivarrace.gringotts.dto.DtoUtils;
 import com.ivarrace.gringotts.dto.mapper.GroupMapper;
 import com.ivarrace.gringotts.dto.mapper.AccountingMapper;
 import com.ivarrace.gringotts.dto.request.GroupRequest;
@@ -60,6 +61,7 @@ public class GroupService {
     public AccountingResponse modify(String accountingId, String groupId, GroupRequest groupRequest) {
         Accounting accounting = accountingUtils.findAccountingEntityByKey(accountingId);
         Group actualGroup = accountingUtils.findAccountingGroup(accounting, groupId);
+        actualGroup.setId(DtoUtils.generateKey(groupRequest.getName()));
         actualGroup.setName(groupRequest.getName());
         return accountingMapper.toDto(accountingRepository.save(accounting));
     }

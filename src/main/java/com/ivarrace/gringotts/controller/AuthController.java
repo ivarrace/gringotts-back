@@ -1,6 +1,6 @@
 package com.ivarrace.gringotts.controller;
 
-import com.ivarrace.gringotts.config.JwtTokenUtil;
+import com.ivarrace.gringotts.config.jwt.JwtTokenUtil;
 import com.ivarrace.gringotts.dto.request.AuthRequest;
 import com.ivarrace.gringotts.dto.response.AuthResponse;
 import com.ivarrace.gringotts.repository.model.users.User;

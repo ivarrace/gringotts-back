@@ -1,4 +1,4 @@
-package com.ivarrace.gringotts.config;
+package com.ivarrace.gringotts.config.jwt;
 
 import com.ivarrace.gringotts.repository.model.users.User;
 import io.jsonwebtoken.Claims;

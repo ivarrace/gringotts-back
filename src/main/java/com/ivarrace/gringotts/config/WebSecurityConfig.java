@@ -1,5 +1,6 @@
 package com.ivarrace.gringotts.config;
 
+import com.ivarrace.gringotts.config.jwt.JwtAuthorizationFilter;
 import com.ivarrace.gringotts.service.AuthService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;

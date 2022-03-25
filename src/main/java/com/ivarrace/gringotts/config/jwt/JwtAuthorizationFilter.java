@@ -1,4 +1,4 @@
-package com.ivarrace.gringotts.config;
+package com.ivarrace.gringotts.config.jwt;
 
 import java.io.IOException;
 import java.util.List;
