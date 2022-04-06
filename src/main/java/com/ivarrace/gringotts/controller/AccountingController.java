@@ -25,6 +25,11 @@ public class AccountingController {
         return accountingService.findAll();
     }
 
+    @GetMapping("/test")
+    public List<AccountingResponse> findUserAccounting(){
+        return accountingService.findAllByUser();
+    }
+
     @GetMapping("/{accountingId}")
     public AccountingResponse findAccountingById(@PathVariable String accountingId,
                                                  @RequestParam Optional<Integer> year){

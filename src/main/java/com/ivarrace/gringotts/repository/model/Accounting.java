@@ -20,6 +20,7 @@ public class Accounting {
     private LocalDateTime lastModified;
     private String name;
     private List<Group> groups;
+    private List<UserAccountingRole> users;
 
 
     public String getId() {
@@ -68,5 +69,13 @@ public class Accounting {
 
     public void setKey(String key) {
         this.key = key;
+    }
+
+    public List<UserAccountingRole> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<UserAccountingRole> users) {
+        this.users = users;
     }
 }

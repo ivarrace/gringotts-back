@@ -4,6 +4,7 @@ import com.ivarrace.gringotts.dto.ErrorResponse;
 import com.ivarrace.gringotts.exception.IllegalGroupTypeException;
 import com.ivarrace.gringotts.exception.ObjectAlreadyExistsException;
 import com.ivarrace.gringotts.exception.ObjectNotFoundException;
+import com.ivarrace.gringotts.exception.UserAlreadyRegisteredException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -35,6 +36,12 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> badCredentials(BadCredentialsException exception) {
         ErrorResponse errorResponse = new ErrorResponse(exception.getMessage());
         return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(value = UserAlreadyRegisteredException.class)
+    public ResponseEntity<ErrorResponse> userAlreadyRegistered(UserAlreadyRegisteredException exception) {
+        ErrorResponse errorResponse = new ErrorResponse(exception.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
 }

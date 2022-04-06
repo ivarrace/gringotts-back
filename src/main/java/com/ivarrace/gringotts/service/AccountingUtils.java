@@ -6,6 +6,8 @@ import com.ivarrace.gringotts.repository.model.Accounting;
 import com.ivarrace.gringotts.repository.model.Category;
 import com.ivarrace.gringotts.repository.model.Group;
 import com.ivarrace.gringotts.repository.model.Record;
+import com.ivarrace.gringotts.repository.model.users.User;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -18,7 +20,8 @@ public class AccountingUtils {
     }
 
     public Accounting findAccountingEntityByKey(String key) {
-        return accountingRepository.findByKey(key).orElseThrow(() -> new ObjectNotFoundException("Accounting" + "[" + key + "]"));
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return accountingRepository.findByKey(user.getId(), key).orElseThrow(() -> new ObjectNotFoundException("Accounting" + "[" + key + "]"));
     }
 
     public Group findAccountingGroup(Accounting accounting, String groupId) {
