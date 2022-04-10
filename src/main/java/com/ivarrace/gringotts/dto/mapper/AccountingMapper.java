@@ -6,7 +6,11 @@ import com.ivarrace.gringotts.dto.response.AccountingResponse;
 import com.ivarrace.gringotts.dto.response.GroupResponse;
 import com.ivarrace.gringotts.dto.response.ReportResponse;
 import com.ivarrace.gringotts.repository.model.Accounting;
+import com.ivarrace.gringotts.repository.model.AccountingRole;
 import com.ivarrace.gringotts.repository.model.GroupType;
+import com.ivarrace.gringotts.repository.model.UserAccountingRole;
+import com.ivarrace.gringotts.repository.model.users.User;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -56,6 +60,11 @@ public class AccountingMapper extends AnnualSummaryGenerator {
         request.setKey(DtoUtils.generateKey(accounting.getName()));
         request.setName(accounting.getName());
         request.setGroups(Collections.emptyList());
+        UserAccountingRole owner = new UserAccountingRole();
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        owner.setUserId(user.getId());
+        owner.setRole(AccountingRole.OWNER);
+        request.setUsers(Collections.singletonList(owner));
         return request;
     }
 
