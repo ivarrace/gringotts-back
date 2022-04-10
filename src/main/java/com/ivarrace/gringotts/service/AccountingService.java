@@ -28,7 +28,8 @@ public class AccountingService {
     }
 
     public List<AccountingResponse> findAll() {
-        return accountingMapper.toDtoList(accountingRepository.findAll());
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return accountingMapper.toDtoList(accountingRepository.findAll(user.getId()));
     }
 
     public AccountingResponse findByKey(String key) {
@@ -56,11 +57,6 @@ public class AccountingService {
         actual.setKey(newKey);
         actual.setName(accounting.getName());
         accountingMapper.toDto(accountingRepository.save(actual));
-    }
-
-    public List<AccountingResponse> findAllByUser() {
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return accountingMapper.toDtoList(accountingRepository.findAll(user.getId()));
     }
 
     private boolean existsByKey(String key){
