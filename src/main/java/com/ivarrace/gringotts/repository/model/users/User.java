@@ -72,4 +72,15 @@ public class User implements UserDetails {
         return this.id;
     }
 
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setAuthorities(Set<Role> authorities) {
+        this.authorities = authorities;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
 }
