@@ -6,11 +6,15 @@ import com.ivarrace.gringotts.dto.response.GroupResponse;
 import com.ivarrace.gringotts.repository.model.Accounting;
 import com.ivarrace.gringotts.repository.model.Group;
 import com.ivarrace.gringotts.repository.model.GroupType;
+import com.ivarrace.gringotts.repository.model.users.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -91,6 +95,11 @@ class AccountingMapperTest {
 
     @Test
     void toNewEntity() {
+        Authentication authentication = mock(Authentication.class);
+        SecurityContext securityContext = mock(SecurityContext.class);
+        SecurityContextHolder.setContext(securityContext);
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        when(authentication.getPrincipal()).thenReturn(new User());
         AccountingRequest request = new AccountingRequest();
         Accounting result = accountingMapper.toNewEntity(request);
         assertEquals(request.getName(), result.getName());
