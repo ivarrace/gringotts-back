@@ -1,5 +1,6 @@
 package com.ivarrace.gringotts.dto;
 
+import com.ivarrace.gringotts.application.dto.DtoUtils;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

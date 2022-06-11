@@ -1,0 +1,16 @@
+spring:
+    data:
+        #MongoDB config
+        mongodb:
+            host: localhost
+            port: 27017
+            database: gringotts
+            username: gringotts
+            password: toor
+
+
+springdoc: #Swagger config
+    api-docs:
+        path: /api-docs
+    swagger-ui:
+        path: /swagger-ui.html

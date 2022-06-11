@@ -1,8 +1,9 @@
 package com.ivarrace.gringotts.dto.mapper;
 
-import com.ivarrace.gringotts.dto.request.RecordRequest;
-import com.ivarrace.gringotts.dto.response.RecordResponse;
-import com.ivarrace.gringotts.repository.model.Record;
+import com.ivarrace.gringotts.application.dto.mapper.RecordMapper;
+import com.ivarrace.gringotts.application.dto.request.RecordRequest;
+import com.ivarrace.gringotts.application.dto.response.RecordResponse;
+import com.ivarrace.gringotts.infrastructure.persistence.mongo.entities.Record;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
