@@ -1,10 +1,12 @@
 package com.ivarrace.gringotts.dto.mapper;
 
-import com.ivarrace.gringotts.dto.request.CategoryRequest;
-import com.ivarrace.gringotts.dto.response.CategoryResponse;
-import com.ivarrace.gringotts.dto.response.RecordResponse;
-import com.ivarrace.gringotts.repository.model.Category;
-import com.ivarrace.gringotts.repository.model.Record;
+import com.ivarrace.gringotts.application.dto.mapper.CategoryMapper;
+import com.ivarrace.gringotts.application.dto.mapper.RecordMapper;
+import com.ivarrace.gringotts.application.dto.request.CategoryRequest;
+import com.ivarrace.gringotts.application.dto.response.CategoryResponse;
+import com.ivarrace.gringotts.application.dto.response.RecordResponse;
+import com.ivarrace.gringotts.infrastructure.persistence.mongo.entities.Category;
+import com.ivarrace.gringotts.infrastructure.persistence.mongo.entities.Record;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,7 +16,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

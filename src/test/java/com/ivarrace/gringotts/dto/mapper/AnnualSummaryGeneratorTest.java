@@ -1,6 +1,7 @@
 package com.ivarrace.gringotts.dto.mapper;
 
-import com.ivarrace.gringotts.dto.response.*;
+import com.ivarrace.gringotts.application.dto.mapper.AnnualSummaryGenerator;
+import com.ivarrace.gringotts.application.dto.response.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
