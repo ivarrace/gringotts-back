@@ -1,9 +1,8 @@
 package com.ivarrace.gringotts.infrastructure.persistence.mongo.mapper;
 
-import com.ivarrace.gringotts.domain.dto.AccountingRoleDto;
-import com.ivarrace.gringotts.domain.dto.UserAccountingRoleDto;
-import com.ivarrace.gringotts.infrastructure.persistence.mongo.entities.AccountingRole;
-import com.ivarrace.gringotts.infrastructure.persistence.mongo.entities.UserAccountingRole;
+import com.ivarrace.gringotts.domain.model.AccountingRole;
+import com.ivarrace.gringotts.domain.model.UserAccountingRole;
+import com.ivarrace.gringotts.infrastructure.persistence.mongo.entities.UserAccountingRoleEntity;
 
 public class UserAccountingRoleMapper {
 
@@ -11,17 +10,17 @@ public class UserAccountingRoleMapper {
         throw new IllegalStateException("Utility class");
     }
 
-    public static UserAccountingRoleDto entityToDto(UserAccountingRole entity){
-        UserAccountingRoleDto dto = new UserAccountingRoleDto();
-        dto.setUserId(entity.getUserId());
-        dto.setRole(AccountingRoleDto.valueOf(entity.getRole().name()));
-        return dto;
+    public static UserAccountingRole entityToDomain(UserAccountingRoleEntity entity){
+        if(entity==null) return null;
+        UserAccountingRole domain = new UserAccountingRole(entity.getUserId(), AccountingRole.valueOf(entity.getRole()));
+        return domain;
     }
 
-    public static UserAccountingRole dtoToEntity(UserAccountingRoleDto dto) {
-        UserAccountingRole entity = new UserAccountingRole();
-        entity.setUserId(dto.getUserId());
-        entity.setRole(AccountingRole.valueOf(dto.getRole().name()));
+    public static UserAccountingRoleEntity domainToEntity(UserAccountingRole domain) {
+        if(domain==null) return null;
+        UserAccountingRoleEntity entity = new UserAccountingRoleEntity();
+        entity.setUserId(domain.getUserId());
+        entity.setRole(domain.getRole().name());
         return entity;
     }
 }

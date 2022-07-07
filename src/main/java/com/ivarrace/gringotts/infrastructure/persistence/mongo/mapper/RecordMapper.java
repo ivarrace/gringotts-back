@@ -1,7 +1,7 @@
 package com.ivarrace.gringotts.infrastructure.persistence.mongo.mapper;
 
-import com.ivarrace.gringotts.domain.dto.RecordDto;
-import com.ivarrace.gringotts.infrastructure.persistence.mongo.entities.Record;
+import com.ivarrace.gringotts.domain.model.Record;
+import com.ivarrace.gringotts.infrastructure.persistence.mongo.entities.RecordEntity;
 
 public class RecordMapper {
 
@@ -9,21 +9,23 @@ public class RecordMapper {
         throw new IllegalStateException("Utility class");
     }
 
-    public static RecordDto entityToDto(Record entity){
-        RecordDto dto = new RecordDto();
-        dto.setId(entity.getId());
-        dto.setDate(entity.getDate());
-        dto.setAmount(entity.getAmount());
-        dto.setInfo(entity.getInfo());
-        return dto;
+    public static Record entityToDomain(RecordEntity entity){
+        if(entity==null) return null;
+        Record domain = new Record();
+        domain.setId(entity.getId());
+        domain.setDate(entity.getDate());
+        domain.setAmount(entity.getAmount());
+        domain.setInfo(entity.getInfo());
+        return domain;
     }
 
-    public static Record dtoToEntity(RecordDto dto) {
-        Record entity = new Record();
-        entity.setId(dto.getId());
-        entity.setDate(dto.getDate());
-        entity.setAmount(dto.getAmount());
-        entity.setInfo(dto.getInfo());
+    public static RecordEntity domainToEntity(Record domain) {
+        if(domain==null) return null;
+        RecordEntity entity = new RecordEntity();
+        entity.setId(domain.getId());
+        entity.setDate(domain.getDate());
+        entity.setAmount(domain.getAmount());
+        entity.setInfo(domain.getInfo());
         return entity;
     }
 }

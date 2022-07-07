@@ -1,50 +1,48 @@
-package com.ivarrace.gringotts.application.controller;
+package com.ivarrace.gringotts.application.rest.controller;
 
-import com.ivarrace.gringotts.application.dto.request.AccountingRequest;
-import com.ivarrace.gringotts.application.dto.response.AccountingResponse;
-import com.ivarrace.gringotts.domain.service.AccountingService;
-import org.springframework.http.HttpStatus;
+import com.ivarrace.gringotts.application.facade.AccountingFacade;
+import com.ivarrace.gringotts.application.rest.dto.request.AccountingRequest;
+import com.ivarrace.gringotts.application.rest.dto.response.AccountingResponse;
+import com.ivarrace.gringotts.infrastructure.persistence.GroupPersistencePort;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController()
 @RequestMapping("/accounting")
 public class AccountingController {
 
-    private final AccountingService accountingService;
+    private final AccountingFacade accountingFacade;
 
-    public AccountingController(AccountingService accountingService){
-        this.accountingService = accountingService;
+    public AccountingController(AccountingFacade accountingFacade){
+        this.accountingFacade = accountingFacade;
     }
 
     @GetMapping("/")
     public List<AccountingResponse> findAccounting(){
-        return accountingService.findAll();
+        return accountingFacade.findAll();
     }
 
     @GetMapping("/{accountingId}")
-    public AccountingResponse findAccountingById(@PathVariable String accountingId,
-                                                 @RequestParam Optional<Integer> year){
-        return accountingService.findByKey(accountingId);
+    public AccountingResponse findAccountingById(@PathVariable String accountingId){
+        return accountingFacade.findByKey(accountingId);
     }
 
     @PostMapping("/")
     public AccountingResponse createAccounting(@RequestBody AccountingRequest accounting){
-        return accountingService.create(accounting);
+        return accountingFacade.create(accounting);
     }
 
     @PutMapping("/{accountingId}")
-    public ResponseEntity<String> modifyAccounting(@PathVariable String accountingId, @RequestBody AccountingRequest accounting){
-        accountingService.modify(accountingId, accounting);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    public ResponseEntity<?> modifyAccounting(@PathVariable String accountingId, @RequestBody AccountingRequest accounting){
+        return accountingFacade.modify(accountingId, accounting);
     }
 
     @DeleteMapping("/{accountingId}")
-    public void deleteAccounting(@PathVariable String accountingId){
-        accountingService.deleteById(accountingId);
+    public ResponseEntity<?> deleteAccounting(@PathVariable String accountingId){
+        return accountingFacade.deleteById(accountingId);
     }
 
 }

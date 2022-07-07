@@ -1,4 +1,4 @@
-package com.ivarrace.gringotts.application.dto;
+package com.ivarrace.gringotts.application.rest.dto;
 
 import org.apache.commons.lang3.StringUtils;
 

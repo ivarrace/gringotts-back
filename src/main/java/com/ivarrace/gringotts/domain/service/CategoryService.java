@@ -1,14 +1,9 @@
 package com.ivarrace.gringotts.domain.service;
 
-import com.ivarrace.gringotts.application.dto.mapper.CategoryMapper;
-import com.ivarrace.gringotts.application.dto.mapper.AccountingMapper;
-import com.ivarrace.gringotts.application.dto.request.CategoryRequest;
-import com.ivarrace.gringotts.application.dto.response.CategoryResponse;
-import com.ivarrace.gringotts.application.dto.response.AccountingResponse;
-import com.ivarrace.gringotts.infrastructure.persistence.mongo.entities.AccountingRepository;
-import com.ivarrace.gringotts.infrastructure.persistence.mongo.entities.Accounting;
-import com.ivarrace.gringotts.infrastructure.persistence.mongo.entities.Category;
-import com.ivarrace.gringotts.infrastructure.persistence.mongo.entities.Group;
+import com.ivarrace.gringotts.domain.model.Accounting;
+import com.ivarrace.gringotts.domain.model.Category;
+import com.ivarrace.gringotts.domain.model.Group;
+import com.ivarrace.gringotts.domain.exception.ObjectNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,53 +11,47 @@ import java.util.List;
 @Service
 public class CategoryService {
 
-    private final AccountingRepository accountingRepository;
-    private final CategoryMapper categoryMapper;
-    private final AccountingMapper accountingMapper;
-    private final AccountingUtils accountingUtils;
+    private final GroupService groupService;
 
-    public CategoryService(AccountingRepository accountingRepository,
-                           CategoryMapper categoryMapper,
-                           AccountingMapper accountingMapper,
-                           AccountingUtils accountingUtils) {
-        this.accountingRepository = accountingRepository;
-        this.categoryMapper = categoryMapper;
-        this.accountingMapper = accountingMapper;
-        this.accountingUtils = accountingUtils;
+    public CategoryService(GroupService groupService) {
+        this.groupService = groupService;
     }
 
-    public List<CategoryResponse> findAllCategories(String accountingId, String groupId) {
-        Accounting accounting = accountingUtils.findAccountingEntityByKey(accountingId);
-        return categoryMapper.toDtoList(accountingUtils.findAccountingGroup(accounting, groupId).getCategories());
+    public List<Category> findAllCategories(String accountingId, String groupId) {
+        return groupService.findById(accountingId, groupId).getCategories();
     }
 
-    public CategoryResponse findCategoryById(String accountingId, String groupId, String categoryId) {
-        Accounting accounting = accountingUtils.findAccountingEntityByKey(accountingId);
-        return categoryMapper.toDto(accountingUtils.findAccountingCategory(accounting, groupId, categoryId));
+    public Category findCategoryById(String accountingId, String groupId, String categoryId) {
+        return groupService.findById(accountingId, groupId)
+                .getCategories().stream()
+                .filter(categoryDto -> categoryId.equals(categoryDto.getId()))
+                .findAny().orElseThrow(() -> new ObjectNotFoundException(categoryId));
     }
 
-    public AccountingResponse createCategory(String accountingId, String groupId, CategoryRequest categoryRequest) {
-        Accounting accounting = accountingUtils.findAccountingEntityByKey(accountingId);
-        Group group = accountingUtils.findAccountingGroup(accounting, groupId);
-        Category category = categoryMapper.toNewEntity(categoryRequest);
+    public Category createCategory(String accountingId, String groupId, Category category) {
+        Group group = groupService.findById(accountingId, groupId);
         group.getCategories().add(category);
-        return accountingMapper.toDto(accountingRepository.save(accounting));
+        return category;
     }
 
-    public AccountingResponse deleteCategoryById(String accountingId, String groupId, String categoryId) {
-        Accounting accounting = accountingUtils.findAccountingEntityByKey(accountingId);
-        Group group = accountingUtils.findAccountingGroup(accounting, groupId);
-        accountingUtils.findAccountingCategory(accounting, groupId, categoryId);
-        group.getCategories().removeIf(item -> categoryId.equals(item.getId()));
-        return accountingMapper.toDto(accountingRepository.save(accounting));
+    public void deleteCategoryById(String accountingId, String groupId, String categoryId) {
+        Group group = groupService.findById(accountingId, groupId);
+        Category toDelete = group.getCategories().stream()
+                .filter(category -> categoryId.equals(category.getId()))
+                .findAny().orElseThrow(() -> new ObjectNotFoundException(categoryId));
+        group.getCategories().remove(toDelete);
+        groupService.modify(accountingId, groupId, group);
     }
 
-    public AccountingResponse modifyCategory(String accountingId, String groupId, String categoryId,
-                                     CategoryRequest categoryRequest) {
-        Accounting accounting = accountingUtils.findAccountingEntityByKey(accountingId);
-        Category category = accountingUtils.findAccountingCategory(accounting, groupId, categoryId);
-        category.setName(categoryRequest.getName());
-        return accountingMapper.toDto(accountingRepository.save(accounting));
+    public void modifyCategory(String accountingId, String groupId, String categoryId,
+                                     Category category) {
+        Group group = groupService.findById(accountingId, groupId);
+        Category toModify = group.getCategories().stream()
+                .filter(existingCategory -> categoryId.equals(existingCategory.getId()))
+                .findAny().orElseThrow(() -> new ObjectNotFoundException(categoryId));
+        group.getCategories().remove(toModify);
+        group.getCategories().add(category);
+        groupService.modify(accountingId, groupId, group);
     }
 
 }

@@ -1,7 +1,7 @@
 package com.ivarrace.gringotts.infrastructure.persistence.mongo.mapper;
 
-import com.ivarrace.gringotts.domain.dto.CategoryDto;
-import com.ivarrace.gringotts.infrastructure.persistence.mongo.entities.Category;
+import com.ivarrace.gringotts.domain.model.Category;
+import com.ivarrace.gringotts.infrastructure.persistence.mongo.entities.CategoryEntity;
 
 import java.util.stream.Collectors;
 
@@ -11,21 +11,23 @@ public class CategoryMapper {
         throw new IllegalStateException("Utility class");
     }
 
-    public static CategoryDto entityToDto(Category entity){
-        CategoryDto dto = new CategoryDto();
-        dto.setId(entity.getId());
-        dto.setCreatedDate(entity.getCreatedDate());
-        dto.setName(entity.getName());
-        dto.setRecords(entity.getRecords().stream().map(RecordMapper::entityToDto).collect(Collectors.toList()));
-        return dto;
+    public static Category entityToDomain(CategoryEntity entity){
+        if(entity==null) return null;
+        Category domain = new Category();
+        domain.setId(entity.getId());
+        domain.setCreatedDate(entity.getCreatedDate());
+        domain.setName(entity.getName());
+        domain.setRecords(entity.getRecords().stream().map(RecordMapper::entityToDomain).collect(Collectors.toList()));
+        return domain;
     }
 
-    public static Category dtoToEntity(CategoryDto dto) {
-        Category entity = new Category();
-        entity.setId(dto.getId());
-        entity.setCreatedDate(dto.getCreatedDate());
-        entity.setName(dto.getName());
-        entity.setRecords(dto.getRecords().stream().map(RecordMapper::dtoToEntity).collect(Collectors.toList()));
+    public static CategoryEntity domainToEntity(Category domain) {
+        if(domain==null) return null;
+        CategoryEntity entity = new CategoryEntity();
+        entity.setId(domain.getId());
+        entity.setCreatedDate(domain.getCreatedDate());
+        entity.setName(domain.getName());
+        entity.setRecords(domain.getRecords().stream().map(RecordMapper::domainToEntity).collect(Collectors.toList()));
         return entity;
     }
 }

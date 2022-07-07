@@ -1,6 +1,6 @@
-package com.ivarrace.gringotts.domain.dto;
+package com.ivarrace.gringotts.domain.model;
 
-public enum GroupTypeDto {
+public enum GroupType {
     EXPENSES,
     INCOME;
 }

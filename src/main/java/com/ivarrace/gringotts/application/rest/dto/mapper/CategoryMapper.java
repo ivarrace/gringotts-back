@@ -1,47 +1,30 @@
-package com.ivarrace.gringotts.application.dto.mapper;
+package com.ivarrace.gringotts.application.rest.dto.mapper;
 
-import com.ivarrace.gringotts.application.dto.request.CategoryRequest;
-import com.ivarrace.gringotts.application.dto.response.CategoryResponse;
-import com.ivarrace.gringotts.application.dto.DtoUtils;
-import com.ivarrace.gringotts.infrastructure.persistence.mongo.entities.Category;
-import org.springframework.stereotype.Component;
+import com.ivarrace.gringotts.application.rest.dto.request.CategoryRequest;
+import com.ivarrace.gringotts.application.rest.dto.response.CategoryResponse;
+import com.ivarrace.gringotts.domain.model.Category;
 
-import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.List;
 import java.util.stream.Collectors;
 
-@Component
 public class CategoryMapper {
 
-    private final RecordMapper recordMapper;
-
-    public CategoryMapper(RecordMapper recordMapper) {
-        this.recordMapper = recordMapper;
+    private CategoryMapper(){
+        throw new IllegalStateException("Utility class");
     }
 
-    public CategoryResponse toDto(Category entity) {
-        CategoryResponse dto = new CategoryResponse();
-        dto.setId(entity.getId());
-        dto.setName(entity.getName());
-        dto.setCreatedDate(entity.getCreatedDate());
-        dto.setRecords(recordMapper.toDtoList(entity.getRecords()));
+    public static CategoryResponse dtoToResponse(Category dto) {
+        CategoryResponse response = new CategoryResponse();
+        response.setId(dto.getId());
+        response.setCreatedDate(dto.getCreatedDate());
+        response.setName(dto.getName());
+        response.setRecords(dto.getRecords().stream().map(RecordMapper::dtoToResponse).collect(Collectors.toList()));
+        response.setAnnualTotals(AnnualSummaryGenerator.generateCategoryAnnualSummary(response));
+        return response;
+    }
+
+    public static Category requestToDto(CategoryRequest request) {
+        Category dto = new Category();
+        dto.setName(request.getName());
         return dto;
-    }
-
-    public List<CategoryResponse> toDtoList(List<Category> list) {
-        if (list == null) {
-            return Collections.emptyList();
-        }
-        return list.stream().map(this::toDto).collect(Collectors.toList());
-    }
-
-    public Category toNewEntity(CategoryRequest request) {
-        Category entity = new Category();
-        entity.setId(DtoUtils.generateKey(request.getName()));
-        entity.setCreatedDate(LocalDateTime.now());
-        entity.setName(request.getName());
-        entity.setRecords(Collections.emptyList());
-        return entity;
     }
 }

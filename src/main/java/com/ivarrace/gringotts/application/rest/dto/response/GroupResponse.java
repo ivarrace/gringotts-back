@@ -1,6 +1,6 @@
-package com.ivarrace.gringotts.application.dto.response;
+package com.ivarrace.gringotts.application.rest.dto.response;
 
-import com.ivarrace.gringotts.infrastructure.persistence.mongo.entities.GroupType;
+import com.ivarrace.gringotts.domain.model.GroupType;
 
 import java.time.LocalDateTime;
 import java.util.Collections;

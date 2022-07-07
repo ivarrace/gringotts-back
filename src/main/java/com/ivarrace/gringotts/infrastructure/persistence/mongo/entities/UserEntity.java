@@ -13,7 +13,7 @@ import java.util.Set;
 
 @Data
 @Document(collection = "users")
-public class User {
+public class UserEntity {
 
     @Id
     private String id;

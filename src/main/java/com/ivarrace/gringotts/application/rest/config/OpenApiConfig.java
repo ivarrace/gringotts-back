@@ -1,4 +1,4 @@
-package com.ivarrace.gringotts.application.config;
+package com.ivarrace.gringotts.application.rest.config;
 
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;

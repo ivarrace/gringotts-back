@@ -1,7 +1,7 @@
 package com.ivarrace.gringotts.infrastructure.persistence.mongo.mapper;
 
-import com.ivarrace.gringotts.domain.dto.AccountingDto;
-import com.ivarrace.gringotts.infrastructure.persistence.mongo.entities.Accounting;
+import com.ivarrace.gringotts.domain.model.Accounting;
+import com.ivarrace.gringotts.infrastructure.persistence.mongo.entities.AccountingEntity;
 
 import java.util.stream.Collectors;
 
@@ -11,27 +11,29 @@ public class AccountingMapper {
         throw new IllegalStateException("Utility class");
     }
 
-    public static AccountingDto entityToDto(Accounting entity){
-        AccountingDto dto = new AccountingDto();
-        dto.setId(entity.getId());
-        dto.setKey(entity.getKey());
-        dto.setName(entity.getName());
-        dto.setCreatedDate(entity.getCreatedDate());
-        dto.setLastModified(entity.getLastModified());
-        dto.setUsers(entity.getUsers().stream().map(UserAccountingRoleMapper::entityToDto).collect(Collectors.toList()));
-        dto.setGroups(entity.getGroups().stream().map(GroupMapper::entityToDto).collect(Collectors.toList()));
-        return dto;
+    public static Accounting entityToDomain(AccountingEntity entity){
+        if(entity==null) return null;
+        Accounting domain = new Accounting();
+        domain.setId(entity.getId());
+        domain.setKey(entity.getKey());
+        domain.setName(entity.getName());
+        domain.setCreatedDate(entity.getCreatedDate());
+        domain.setLastModified(entity.getLastModified());
+        domain.setUsers(entity.getUsers().stream().map(UserAccountingRoleMapper::entityToDomain).collect(Collectors.toList()));
+        domain.setGroups(entity.getGroups().stream().map(GroupMapper::entityToDomain).collect(Collectors.toList()));
+        return domain;
     }
 
-    public static Accounting dtoToEntity(AccountingDto dto){
-        Accounting entity = new Accounting();
-        entity.setId(dto.getId());
-        entity.setKey(dto.getKey());
-        entity.setName(dto.getName());
-        entity.setCreatedDate(dto.getCreatedDate());
-        entity.setLastModified(dto.getLastModified());
-        entity.setUsers(dto.getUsers().stream().map(UserAccountingRoleMapper::dtoToEntity).collect(Collectors.toList()));
-        entity.setGroups(dto.getGroups().stream().map(GroupMapper::dtoToEntity).collect(Collectors.toList()));
+    public static AccountingEntity domainToEntity(Accounting domain){
+        if(domain==null) return null;
+        AccountingEntity entity = new AccountingEntity();
+        entity.setId(domain.getId());
+        entity.setKey(domain.getKey());
+        entity.setName(domain.getName());
+        entity.setCreatedDate(domain.getCreatedDate());
+        entity.setLastModified(domain.getLastModified());
+        entity.setUsers(domain.getUsers().stream().map(UserAccountingRoleMapper::domainToEntity).collect(Collectors.toList()));
+        entity.setGroups(domain.getGroups().stream().map(GroupMapper::domainToEntity).collect(Collectors.toList()));
         return entity;
     }
 }

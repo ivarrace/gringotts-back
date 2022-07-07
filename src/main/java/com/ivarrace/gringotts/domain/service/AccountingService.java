@@ -1,13 +1,11 @@
 package com.ivarrace.gringotts.domain.service;
 
-import com.ivarrace.gringotts.application.dto.DtoUtils;
-import com.ivarrace.gringotts.application.dto.mapper.AccountingMapper;
-import com.ivarrace.gringotts.application.dto.request.AccountingRequest;
-import com.ivarrace.gringotts.application.dto.response.AccountingResponse;
+import com.ivarrace.gringotts.domain.model.Accounting;
 import com.ivarrace.gringotts.domain.exception.ObjectAlreadyExistsException;
-import com.ivarrace.gringotts.infrastructure.persistence.mongo.entities.AccountingRepository;
-import com.ivarrace.gringotts.infrastructure.persistence.mongo.entities.Accounting;
-import com.ivarrace.gringotts.infrastructure.persistence.mongo.entities.User;
+import com.ivarrace.gringotts.domain.exception.ObjectNotFoundException;
+import com.ivarrace.gringotts.domain.model.AccountingRole;
+import com.ivarrace.gringotts.infrastructure.persistence.AccountingPersistencePort;
+import com.ivarrace.gringotts.infrastructure.security.dto.User;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -16,52 +14,50 @@ import java.util.List;
 @Service
 public class AccountingService {
 
-    private final AccountingRepository accountingRepository;
-    private final AccountingMapper accountingMapper;
-    private final AccountingUtils accountingUtils;
+    private final AccountingPersistencePort accountingPersistencePort;
 
-    public AccountingService(AccountingRepository accountingRepository, AccountingMapper accountingMapper,
-                             AccountingUtils accountingUtils) {
-        this.accountingRepository = accountingRepository;
-        this.accountingMapper = accountingMapper;
-        this.accountingUtils = accountingUtils;
+    public AccountingService(AccountingPersistencePort accountingPersistencePort) {
+        this.accountingPersistencePort = accountingPersistencePort;
     }
 
-    public List<AccountingResponse> findAll() {
+    public List<Accounting> findAll() {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return accountingMapper.toDtoList(accountingRepository.findAll(user.getId()));
+        return accountingPersistencePort.findAll(user.getId());
     }
 
-    public AccountingResponse findByKey(String key) {
-        return accountingMapper.toDto(accountingUtils.findAccountingEntityByKey(key));
+    public Accounting findByKey(String key) {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return accountingPersistencePort.findByUserAndKey(user.getId(), key).orElseThrow(() -> new ObjectNotFoundException("Accounting" + "[" + key + "]"));
     }
 
-    public AccountingResponse create(AccountingRequest accounting) {
-        Accounting entity = accountingMapper.toNewEntity(accounting);
-        if(existsByKey(entity.getKey())){
-            throw new ObjectAlreadyExistsException(entity.getKey());
+    public Accounting create(Accounting accounting) {
+        String ownerId = accounting.getUsers().stream()
+                .filter(userAccountingRole -> AccountingRole.OWNER.equals(userAccountingRole.getRole()))
+                .map(userAccountingRole -> userAccountingRole.getUserId()).findFirst()
+                .get();
+        if(!accountingPersistencePort.findByUserAndKey(ownerId, accounting.getKey()).isEmpty()){
+            throw new ObjectAlreadyExistsException(accounting.getKey());
         }
-        return accountingMapper.toDto(accountingRepository.save(entity));
+        return accountingPersistencePort.save(accounting);
     }
 
     public void deleteById(String key) {
-        accountingRepository.delete(accountingUtils.findAccountingEntityByKey(key));
+        Accounting accounting = this.findByKey(key);
+        accountingPersistencePort.delete(accounting);
     }
 
-    public void modify(String key, AccountingRequest accounting) {
-        Accounting actual = accountingUtils.findAccountingEntityByKey(key);
-        String newKey = DtoUtils.generateKey(accounting.getName());
-        if(existsByKey(newKey)){
-            throw new ObjectAlreadyExistsException(newKey);
+    public void modify(String key, Accounting accounting) {
+        Accounting actual = this.findByKey(key);
+        String ownerId = accounting.getUsers().stream()
+                .filter(userAccountingRole -> AccountingRole.OWNER.equals(userAccountingRole.getRole()))
+                .map(userAccountingRole -> userAccountingRole.getUserId()).findFirst()
+                .get();
+        if(!accountingPersistencePort.findByUserAndKey(ownerId, accounting.getKey()).isEmpty()){
+            throw new ObjectAlreadyExistsException(accounting.getKey());
         }
-        actual.setKey(newKey);
-        actual.setName(accounting.getName());
-        accountingMapper.toDto(accountingRepository.save(actual));
-    }
-
-    private boolean existsByKey(String key){
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return !accountingRepository.findByKey(user.getId(), key).isEmpty();
+        accounting.setId(actual.getId());
+        accounting.setCreatedDate(actual.getCreatedDate());
+        accountingPersistencePort.save(accounting);
     }
 
 }

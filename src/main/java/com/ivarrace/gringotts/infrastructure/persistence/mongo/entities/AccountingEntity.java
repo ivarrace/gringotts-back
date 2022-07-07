@@ -11,7 +11,7 @@ import java.util.List;
 
 @Data
 @Document(collection = "accounting")
-public class Accounting {
+public class AccountingEntity {
 
     @Id
     private String id;
@@ -21,7 +21,7 @@ public class Accounting {
     @LastModifiedDate
     private LocalDateTime lastModified;
     private String name;
-    private List<UserAccountingRole> users;
-    private List<Group> groups;
+    private List<UserAccountingRoleEntity> users;
+    private List<GroupEntity> groups;
 
 }

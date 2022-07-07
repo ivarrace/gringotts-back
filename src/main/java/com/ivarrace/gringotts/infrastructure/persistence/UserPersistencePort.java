@@ -1,12 +1,12 @@
 package com.ivarrace.gringotts.infrastructure.persistence;
 
-import com.ivarrace.gringotts.infrastructure.security.dto.UserDto;
+import com.ivarrace.gringotts.infrastructure.security.dto.User;
 
 import java.util.Optional;
 
 public interface UserPersistencePort {
 
-    Optional<UserDto> findByUsername(String username);
+    Optional<User> findByUsername(String username);
 
-    UserDto save(UserDto newUser);
+    User save(User newUser);
 }

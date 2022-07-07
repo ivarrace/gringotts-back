@@ -1,6 +1,6 @@
-package com.ivarrace.gringotts.application.config;
+package com.ivarrace.gringotts.application.rest.config;
 
-import com.ivarrace.gringotts.application.dto.ErrorResponse;
+import com.ivarrace.gringotts.application.rest.dto.ErrorResponse;
 import com.ivarrace.gringotts.domain.exception.IllegalGroupTypeException;
 import com.ivarrace.gringotts.domain.exception.ObjectAlreadyExistsException;
 import com.ivarrace.gringotts.domain.exception.ObjectNotFoundException;

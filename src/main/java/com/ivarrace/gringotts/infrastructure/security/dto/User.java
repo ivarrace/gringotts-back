@@ -10,14 +10,14 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Data
-public class UserDto implements UserDetails {
+public class User implements UserDetails {
 
     private String id;
     private LocalDateTime createdDate;
     private LocalDateTime lastModified;
     private String username;
     private String password;
-    private Set<RoleDto> authorities = new HashSet<>();
+    private Set<Role> authorities = new HashSet<>();
     private boolean enabled = true;
     private boolean nonExpired = true;
     private boolean nonLocked = true;

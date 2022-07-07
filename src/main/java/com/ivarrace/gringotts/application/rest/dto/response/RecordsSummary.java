@@ -1,6 +1,6 @@
-package com.ivarrace.gringotts.application.dto.response;
+package com.ivarrace.gringotts.application.rest.dto.response;
 
-import com.ivarrace.gringotts.application.dto.DtoUtils;
+import com.ivarrace.gringotts.application.rest.dto.DtoUtils;
 
 import java.time.Month;
 import java.util.Arrays;

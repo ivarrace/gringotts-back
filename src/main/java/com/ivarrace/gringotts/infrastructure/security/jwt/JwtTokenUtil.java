@@ -1,6 +1,6 @@
 package com.ivarrace.gringotts.infrastructure.security.jwt;
 
-import com.ivarrace.gringotts.infrastructure.security.dto.UserDto;
+import com.ivarrace.gringotts.infrastructure.security.dto.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
@@ -19,7 +19,7 @@ public class JwtTokenUtil {
     private static final  String JWT_SECRET = "zdtlD3JK56m6wTTgsNFhqzjqP";
     private static final String JWT_ISSUER = "ivarrace.com";
 
-    public String generateAccessToken(UserDto user) {
+    public String generateAccessToken(User user) {
         return Jwts.builder()
                 .setSubject(format("%s,%s", user.getId(), user.getUsername()))
                 .setIssuer(JWT_ISSUER)

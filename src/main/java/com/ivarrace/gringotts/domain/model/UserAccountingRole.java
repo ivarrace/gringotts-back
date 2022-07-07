@@ -1,11 +1,14 @@
-package com.ivarrace.gringotts.domain.dto;
+package com.ivarrace.gringotts.domain.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
-public class UserAccountingRoleDto {
+@AllArgsConstructor
+public class UserAccountingRole {
 
     private String userId;
-    private AccountingRoleDto role;
+    private AccountingRole role;
 
 }

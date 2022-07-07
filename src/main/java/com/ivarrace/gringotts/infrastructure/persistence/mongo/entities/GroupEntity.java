@@ -7,13 +7,13 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
-public class Group {
+public class GroupEntity {
 
     private String id;
     @CreatedDate
     private LocalDateTime createdDate;
     private String name;
-    private GroupType type;
-    private List<Category> categories;
+    private String type;
+    private List<CategoryEntity> categories;
 
 }

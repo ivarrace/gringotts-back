@@ -2,14 +2,14 @@ package com.ivarrace.gringotts.infrastructure.security.dto;
 
 import org.springframework.security.core.GrantedAuthority;
 
-public class RoleDto implements GrantedAuthority {
+public class Role implements GrantedAuthority {
 
-    public static final RoleDto USER = new RoleDto("USER");
-    public static final RoleDto ADMIN = new RoleDto("ADMIN");
+    public static final Role USER = new Role("USER");
+    public static final Role ADMIN = new Role("ADMIN");
 
     private String authority;
 
-    public RoleDto(String authority) {
+    public Role(String authority) {
         this.authority = authority;
     }
 

@@ -1,13 +1,18 @@
 package com.ivarrace.gringotts.infrastructure.persistence;
 
-import com.ivarrace.gringotts.domain.dto.AccountingDto;
+import com.ivarrace.gringotts.domain.model.Accounting;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface AccountingPersistencePort {
 
-    Optional<AccountingDto> findByKey(String userId, String key);
+    Optional<Accounting> findByUserAndKey(String userId, String accountingKey);
 
-    List<AccountingDto> findAll(String userId);
+    List<Accounting> findAll(String userId);
+
+    Accounting save(Accounting accounting);
+
+    void delete(Accounting accounting);
+
 }

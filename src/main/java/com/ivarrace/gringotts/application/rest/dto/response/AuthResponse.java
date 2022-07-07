@@ -1,4 +1,4 @@
-package com.ivarrace.gringotts.application.dto.response;
+package com.ivarrace.gringotts.application.rest.dto.response;
 
 import java.time.LocalDateTime;
 

@@ -1,4 +1,4 @@
-package com.ivarrace.gringotts.application.dto.request;
+package com.ivarrace.gringotts.application.rest.dto.request;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;

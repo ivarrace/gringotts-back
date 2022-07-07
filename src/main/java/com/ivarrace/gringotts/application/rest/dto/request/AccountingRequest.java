@@ -1,4 +1,4 @@
-package com.ivarrace.gringotts.application.dto.request;
+package com.ivarrace.gringotts.application.rest.dto.request;
 
 public class AccountingRequest {
 

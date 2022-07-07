@@ -1,10 +1,10 @@
 package com.ivarrace.gringotts.infrastructure.security;
 
-import com.ivarrace.gringotts.application.dto.request.RegisterRequest;
+import com.ivarrace.gringotts.application.rest.dto.request.RegisterRequest;
 import com.ivarrace.gringotts.domain.exception.UserAlreadyRegisteredException;
 import com.ivarrace.gringotts.infrastructure.persistence.UserPersistencePort;
-import com.ivarrace.gringotts.infrastructure.security.dto.RoleDto;
-import com.ivarrace.gringotts.infrastructure.security.dto.UserDto;
+import com.ivarrace.gringotts.infrastructure.security.dto.Role;
+import com.ivarrace.gringotts.infrastructure.security.dto.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -28,22 +28,22 @@ public class AuthService  implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<UserDto> user = userPersistencePort.findByUsername(username);
+        Optional<User> user = userPersistencePort.findByUsername(username);
         if (user.isPresent()) {
             return user.get();
         }
         throw new UsernameNotFoundException(username);
     }
 
-    public UserDto register(RegisterRequest request){
-        Optional<UserDto> user = userPersistencePort.findByUsername(request.getUsername());
+    public User register(RegisterRequest request){
+        Optional<User> user = userPersistencePort.findByUsername(request.getUsername());
         if (user.isPresent()) {
             throw new UserAlreadyRegisteredException(request.getUsername());
         }
-        UserDto newUser = new UserDto();
+        User newUser = new User();
         newUser.setUsername(request.getUsername());
         newUser.setPassword(bCryptPasswordEncoder.encode(request.getPassword()));
-        newUser.setAuthorities(Collections.singleton(RoleDto.USER));
+        newUser.setAuthorities(Collections.singleton(Role.USER));
         return userPersistencePort.save(newUser);
     }
 

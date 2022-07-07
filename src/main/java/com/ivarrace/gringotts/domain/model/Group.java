@@ -1,4 +1,4 @@
-package com.ivarrace.gringotts.domain.dto;
+package com.ivarrace.gringotts.domain.model;
 
 import lombok.Data;
 
@@ -6,12 +6,12 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
-public class GroupDto {
+public class Group {
 
     private String id;
     private LocalDateTime createdDate;
     private String name;
-    private GroupTypeDto type;
-    private List<CategoryDto> categories;
+    private GroupType type;
+    private List<Category> categories;
 
 }

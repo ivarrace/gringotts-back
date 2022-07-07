@@ -1,20 +1,14 @@
-package com.ivarrace.gringotts.application.dto.mapper;
+package com.ivarrace.gringotts.application.rest.dto.mapper;
 
-import com.ivarrace.gringotts.application.dto.response.*;
+import com.ivarrace.gringotts.application.rest.dto.response.*;
 
 public class AnnualSummaryGenerator {
 
-    public void generateAnnualSummary(AccountingResponse accounting) {
-        accounting.getExpenses().ifPresent(
-                expenses -> expenses.setAnnualTotals(generateReportAnnualSummary(expenses))
-        );
-        accounting.getIncome().ifPresent(
-                income -> income.setAnnualTotals(generateReportAnnualSummary(income))
-        );
-        accounting.setSavings(generateSavingsSummary(accounting));
+    private AnnualSummaryGenerator(){
+        throw new IllegalStateException("Utility class");
     }
 
-    private RecordsSummary generateSavingsSummary(AccountingResponse accounting) {
+    public static RecordsSummary generateSavingsSummary(AccountingResponse accounting) {
         RecordsSummary recordsSummary = new RecordsSummary();
         double total = 0;
         if(accounting.getExpenses().isPresent()){
@@ -36,7 +30,7 @@ public class AnnualSummaryGenerator {
         return recordsSummary;
     }
 
-    private RecordsSummary generateReportAnnualSummary(ReportResponse reportResponse) {
+    public static RecordsSummary generateReportAnnualSummary(ReportResponse reportResponse) {
         RecordsSummary recordsSummary = new RecordsSummary();
         reportResponse.getGroups().forEach(group -> {
             group.setAnnualTotals(generateGroupAnnualSummary(group));
@@ -50,7 +44,7 @@ public class AnnualSummaryGenerator {
         return recordsSummary;
     }
 
-    private RecordsSummary generateGroupAnnualSummary(GroupResponse group) {
+    public static RecordsSummary generateGroupAnnualSummary(GroupResponse group) {
         RecordsSummary recordsSummary = new RecordsSummary();
         group.getCategories().forEach(category -> {
             category.setAnnualTotals(generateCategoryAnnualSummary(category));
@@ -64,7 +58,7 @@ public class AnnualSummaryGenerator {
         return recordsSummary;
     }
 
-    private RecordsSummary generateCategoryAnnualSummary(CategoryResponse category) {
+    public static RecordsSummary generateCategoryAnnualSummary(CategoryResponse category) {
         RecordsSummary recordsSummary = new RecordsSummary();
         category.getRecords().forEach(item -> {
             recordsSummary.getMonthly().merge(item.getDate().getMonth(), item.getAmount(), Double::sum);

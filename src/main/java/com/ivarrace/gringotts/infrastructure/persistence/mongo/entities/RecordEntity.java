@@ -5,7 +5,7 @@ import lombok.Data;
 import java.time.LocalDate;
 
 @Data
-public class Record {
+public class RecordEntity {
 
     private String id;
     private LocalDate date;
